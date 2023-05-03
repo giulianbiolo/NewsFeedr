@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.prettier-scrollbar {
+  --sb-track-color: rgb(125, 114, 89);
+  --sb-thumb-color: rgb(239, 153, 149);
+  --sb-size: 6px;
+
+  scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+}
+
+.prettier-scrollbar::-webkit-scrollbar {
+  width: var(--sb-size);
+}
+
+.prettier-scrollbar::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 6px;
+}
+
+.prettier-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 6px;
+}
