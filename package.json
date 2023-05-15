@@ -15,7 +15,8 @@
   },
   "dependencies": {
     "@heroicons/vue": "^2.0.17",
-    "@nuxtjs/tailwindcss": "^6.6.7",
-    "daisyui": "^2.51.6"
+    "@nuxtjs/tailwindcss": "^6.6.8",
+    "daisyui": "^2.51.6",
+    "mongodb": "^5.5.0"
   }
 }
