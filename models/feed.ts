@@ -4,8 +4,8 @@ export default class Feed {
   constructor(
     public id?: ObjectId,
     public title?: string,
-    public body?: string,
+    public description?: string,
     public link?: string,
-    public dt_create?: Date,
+    public pubDate?: Date,
   ) {}
 }

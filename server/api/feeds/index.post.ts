@@ -1,4 +1,4 @@
-import DbManager from "~/managers/dbManager";
+import DbManager from "~/server/managers/dbManager";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);

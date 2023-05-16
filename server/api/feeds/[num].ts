@@ -1,5 +1,5 @@
-import DbManager from "~/managers/dbManager";
 import Feed from "~/models/feed";
+import DbManager from "~/server/managers/dbManager";
 
 export default defineEventHandler(async (event) => {
   let num = event.context.params?.num;

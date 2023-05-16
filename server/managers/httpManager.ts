@@ -5,8 +5,10 @@ class HttpManager {
     this.baseApiUrl = baseApiUrl;
   }
 
-  public async get<T>(url: string, headers?: HeadersInit): Promise<T> {
+  public async get<T>(url?: string, headers?: HeadersInit): Promise<T> {
+    url = url || '';
     const apiUrl = `${this.baseApiUrl}/${url}`;
+
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: headers
@@ -16,23 +18,24 @@ class HttpManager {
       throw new Error(`Error getting data from ${apiUrl}: ${response.statusText}`);
     }
 
-    const data = await response.json() as T;
+    const data = JSON.stringify(response) as T;
     return data;
   }
 
-  public async post<T>(url: string, data: any, headers?: HeadersInit): Promise<T> {
+  public async post<T>(url?: string, data?: any, headers?: HeadersInit): Promise<T> {
+    url = url || '';
     const apiUrl = `${this.baseApiUrl}/${url}`;
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(data)
+      body: JSON.stringify(data || '')
     });
 
     if (!response.ok) {
       throw new Error(`Error posting data to ${apiUrl}: ${response.statusText}`);
     }
 
-    const responseData = await response.json() as T;
+    const responseData = JSON.stringify(response) as T;
     return responseData;
   }
 }
