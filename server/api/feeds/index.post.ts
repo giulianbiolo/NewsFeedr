@@ -1,13 +1,13 @@
-import dbManager from "~/managers/dbManager";
+import DbManager from "~/managers/dbManager";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const db = new dbManager();
+  const db = DbManager.getInstance();
 
   try {
     db.putFeeds(body);
-    return {statusCode: 200};
+    return { statusCode: 200 };
   } catch (err) {
-    return {err}
+    return { err }
   }
 })

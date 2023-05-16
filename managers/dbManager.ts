@@ -5,10 +5,12 @@ const uri = "mongodb+srv://admin:admin@cluster0.r4bplmk.mongodb.net/?retryWrites
 const dbName = "NewsFeedr";
 const rssFeedsCollection = "rssFeeds";
 
-class dbManager {
+class DbManager {
+  static _instance: DbManager;
+
   private client: MongoClient
 
-  constructor() {
+  private constructor() {
     this.client = new MongoClient(uri);
     this.client.connect()
       .then(() => console.log('Connected to MongoDB'))
@@ -22,6 +24,14 @@ class dbManager {
     } catch (err) {
       console.error(err)
     }
+  }
+
+  static getInstance(): DbManager {
+    if (!DbManager._instance) {
+      DbManager._instance = new DbManager();
+    }
+
+    return DbManager._instance;
   }
 
   async getFeeds(): Promise<Feed[]> {
@@ -50,4 +60,4 @@ class dbManager {
   }
 }
 
-export default dbManager;
+export default DbManager;

@@ -1,9 +1,9 @@
-import dbManager from "~/managers/dbManager";
+import DbManager from "~/managers/dbManager";
 import Feed from "~/models/feed";
 
 export default defineEventHandler(async (event) => {
   let num = event.context.params?.num;
-  const db = new dbManager();
+  const db = DbManager.getInstance();
 
   if (num === undefined) {
     throw createError({ statusCode: 400, statusMessage: "num is required" });

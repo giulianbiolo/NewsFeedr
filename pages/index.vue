@@ -17,7 +17,6 @@
     <p>{{ data.err.statusCode }}</p>
     <p>{{ data.err.message }}</p>
   </div>
-
 </template>
 
 <script setup>
