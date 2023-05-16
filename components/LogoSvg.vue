@@ -1,4 +1,5 @@
 <template>
+  <NuxtLink to="/">
   <svg version="1.0" width="425.000000pt" height="442.000000pt" viewBox="0 0 425.000000 442.000000"
     preserveAspectRatio="xMidYMid meet" :class="className">
 
@@ -20,6 +21,7 @@ c-13 8 -85 50 -159 93 -285 165 -349 202 -406 238 -32 20 -133 80 -224 133
 -91 52 -233 135 -317 184 -83 49 -160 89 -170 89 -10 -1 -56 -24 -103 -52z" />
     </g>
   </svg>
+</NuxtLink>
 </template>
 
 <script>
