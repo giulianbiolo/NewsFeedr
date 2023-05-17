@@ -1,8 +1,8 @@
-import DbManager from "~/server/managers/dbManager";
+import DbFeedManager from "~/server/managers/db/feedManager";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const db = DbManager.getInstance();
+  const db = DbFeedManager.getInstance();
 
   try {
     db.putFeeds(body);

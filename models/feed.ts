@@ -1,11 +1,10 @@
 import { ObjectId } from "mongodb";
 
-export default class Feed {
-  constructor(
-    public id?: ObjectId,
-    public title?: string,
-    public description?: string,
-    public link?: string,
-    public pubDate?: Date,
-  ) {}
+export default interface Feed {
+  id?: ObjectId,
+  progr_magazine?: number,
+  title?: string,
+  description?: string,
+  link?: string,
+  pubDate?: Date,
 }

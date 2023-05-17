@@ -2,7 +2,7 @@ import { JSDOM } from 'jsdom';
 import HttpManager from './httpManager';
 import Feed from '~/models/feed';
 
-class RssManager {
+class HttpFeedManager {
   private httpManager: HttpManager;
 
   constructor(url: string) {
@@ -52,4 +52,4 @@ class RssManager {
   }
 }
 
-export default RssManager;
+export default HttpFeedManager;

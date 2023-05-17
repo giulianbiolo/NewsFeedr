@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data.statusCode == 200" v-for="feed in data.feeds">
+  <div v-if="data.statusCode == 200" v-for="feed in data.data">
     <a :href="feed.link">
       <div>
         <p class="text-3xl">{{ feed.title }}</p>

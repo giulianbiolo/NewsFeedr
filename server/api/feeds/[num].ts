@@ -1,9 +1,9 @@
 import Feed from "~/models/feed";
-import DbManager from "~/server/managers/dbManager";
+import DbFeedManager from "~/server/managers/db/feedManager";
 
 export default defineEventHandler(async (event) => {
   let num = event.context.params?.num;
-  const db = DbManager.getInstance();
+  const db = DbFeedManager.getInstance();
 
   if (num === undefined) {
     throw createError({ statusCode: 400, statusMessage: "num is required" });
@@ -21,5 +21,5 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "num is out of range" });
   }
 
-  return { statusCode: 200, feeds: feeds.slice(0, intNum), };
+  return { statusCode: 200, data: feeds.slice(0, intNum), };
 })

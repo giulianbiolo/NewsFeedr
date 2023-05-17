@@ -1,12 +1,12 @@
 import Feed from "~/models/feed";
-import DbManager from "~/server/managers/dbManager";
+import DbFeedManager from "~/server/managers/db/feedManager";
 
 export default defineEventHandler(async (_event) => {
-  const db = DbManager.getInstance();
+  const db = DbFeedManager.getInstance();
 
   try {
     const feeds: Feed[] = await db.getFeeds();
-    return { statusCode: 200, feeds: feeds };
+    return { statusCode: 200, data: feeds };
   } catch (err) {
     return { err }
   }
