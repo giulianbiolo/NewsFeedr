@@ -1,6 +1,6 @@
 <template>
-    <Navbar />
-    <div class="drawer drawer-mobile">
+  <Navbar />
+  <div class="drawer drawer-mobile">
     <input id="custom_sidebar" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content bg-base-200 mt-[5rem] block p-4 h-full overflow-y-scroll prettier-scrollbar">
       <!-- Page content here -->

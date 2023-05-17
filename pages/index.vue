@@ -16,5 +16,5 @@
 </template>
 
 <script setup>
-  const { data } = await useFetch("/api/feeds");
+const { data } = await useFetch("/api/feeds");
 </script>
