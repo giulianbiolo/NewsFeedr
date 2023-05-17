@@ -25,7 +25,7 @@
 useHead({
   htmlAttrs: {
     lang: 'en',
-    'data-theme': 'lofi',
+    'data-theme': 'dark',
   },
 })
 </script>
