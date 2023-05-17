@@ -9,6 +9,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.1",
     "@types/node": "^18",
     "nuxt": "^3.4.3",
     "tailwindcss": "^3.3.2"
@@ -16,9 +17,10 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@heroicons/vue": "^2.0.17",
-    "@nuxtjs/tailwindcss": "^6.6.7",
+    "@nuxtjs/tailwindcss": "^6.6.8",
     "daisyui": "^2.51.6",
-    "mongodb": "^5.5.0",
+    "jsdom": "^22.0.0",
+    "mongodb": "^5.5.0"
     "npm": "^9.6.6"
   }
 }
