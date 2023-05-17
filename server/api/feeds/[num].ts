@@ -11,15 +11,9 @@ export default defineEventHandler(async (event) => {
 
   let feeds: Feed[] = [];
   try {
-    feeds = await db.getFeeds();
+    feeds = await db.getLastNFeeds(parseInt(num));
+    return {status: 200, body: feeds};
   } catch (err) {
     return err;
   }
-
-  let intNum = parseInt(num);
-  if (intNum < 0 || intNum > feeds.length) {
-    throw createError({ statusCode: 400, statusMessage: "num is out of range" });
-  }
-
-  return { statusCode: 200, data: feeds.slice(0, intNum), };
 })

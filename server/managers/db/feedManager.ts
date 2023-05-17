@@ -29,6 +29,21 @@ class DbFeedManager extends DbManager {
     }
   }
 
+  async getLastNFeeds(n: number): Promise<Feed[]> {
+    try {
+      const database = this.client.db(dbName);
+      const collection = database.collection(collectionName);
+      const pipeline = [
+        { $sort: { pubDate: -1 } },
+        { $limit: n },
+      ];
+      const result = await collection.aggregate(pipeline).toArray() as Feed[];
+      return result;
+    } catch (err) {
+      throw createError({ statusCode: 500, statusMessage: `Cannot get the feeds, error: ${err}` });
+    }
+  }
+
   async getFeedForMagazine(progr_magazine: number): Promise<Feed[]> {
     try {
       const database = this.client.db(dbName);
@@ -46,8 +61,11 @@ class DbFeedManager extends DbManager {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
 
+
       for (const feed of feeds) {
-        await collection.insertOne(feed);
+        if (!collection.findOne({ link: feed.link })) {
+          await collection.insertOne(feed);
+        }
       }
       return;
     } catch (err) {

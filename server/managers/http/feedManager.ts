@@ -9,7 +9,7 @@ class HttpFeedManager {
     this.httpManager = new HttpManager(url);
   }
 
-  public async getFeeds(): Promise<Record<string, any>> {
+  public async getFeeds(): Promise<Feed[]> {
     const response = await this.httpManager.get<Response>();
     let response_text = await response.text();
 
