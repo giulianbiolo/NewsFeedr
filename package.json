@@ -20,7 +20,7 @@
     "@nuxtjs/tailwindcss": "^6.6.8",
     "daisyui": "^2.51.6",
     "jsdom": "^22.0.0",
-    "mongodb": "^5.5.0"
+    "mongodb": "^5.5.0",
     "npm": "^9.6.6"
   }
 }
