@@ -1,0 +1,150 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "NewsFeedr APIs"
+  description: NewsFeedr API is the collection of all APIs used by the NewsFeedr website
+  license:
+    name: MIT
+    url: https://github.com/giulianbiolo/NewsFeedr
+basePath: /api
+schemes:
+- https
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /feeds:
+    x-summary: APIs regarding all feeds
+    get:
+      summary: List All the Feeds from the DB
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+
+  /feeds/:
+    x-summary: APIs regarding the last num feeds
+    get:
+      summary: List the latest num Feeds
+      parameters:
+        - name: num
+          in: query
+          description: Number of Feeds to return
+          type: integer
+          required: true
+          x-example: 10
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+          examples:
+            application/json:
+              feeds:
+                - id: MongoDB_ID_String
+                  title: A news article title
+                  description: A news article description
+                  link: ansa.it/this/is/the/link
+                - id: MongoDB_ID_String_2
+                  title: A news article title new
+                  description: A news article description new
+                  link: ansa.it/this/is/the/link/new
+  /feeds/magazine:
+    x-summary: APIs regarding all the Magazines
+    get:
+      summary: List All the Magazines from the DB
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Magazine'
+  /feeds/magazine/:
+    x-summary: APIs regarding the single Magazine
+    get:
+      summary: List all the Feeds of a specific Magazine where it's Id = num
+      parameters:
+        - name: num
+          in: query
+          description: Progr ID of the Magazine
+          type: integer
+          required: true
+          x-example: 10
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+          examples:
+            application/json:
+              feeds:
+                - id: MongoDB_ID_String
+                  title: A news article title
+                  description: A news article description
+                  link: ansa.it/this/is/the/link
+                - id: MongoDB_ID_String_2
+                  title: A news article title new
+                  description: A news article description new
+                  link: ansa.it/this/is/the/link/new
+  /feeds/magazine/fetch:
+    x-summary: APIs for refreshing RSS Feeds
+    get:
+      summary: List All the Feeds from the DB after inducing a refresh of the RSS Feeds
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+  /feeds/magazine/fetch/:
+    x-summary: APIs for refreshing RSS Feeds of a specific Magazine
+    get:
+      summary: List the Feeds of a Magazine from the DB after inducing a refresh of that Magazine's RSS Feeds
+      parameters:
+        - name: num
+          in: query
+          description: Progr ID of the Magazine 
+          type: integer
+          required: true
+          x-example: 10
+      responses:
+        200:
+          description: Successful Response
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Feed'
+
+definitions:
+  Feed:
+    type: object
+    properties:
+      id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      link:
+        type: string
+  Magazine:
+    type: object
+    properties:
+      id:
+        type: string
+      progr:
+        type: integer
+      name:
+        type: string
+      url:
+        type: string
