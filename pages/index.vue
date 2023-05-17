@@ -1,20 +1,20 @@
 <template>
-  <h1>Welcome to NewsFeedr!</h1> <br>
-
-  <div>
-    <Nuxt-link to="/login"><button type="submit" class="btn">Fai il login!</button><br></Nuxt-link>
-  </div>
-
-  <div style="height: 40px;"></div>
-
-  <div v-for="feed in data.feeds">
-    <p>{{ feed.title }}</p>
-    <p>{{ feed.text }}</p>
+  <div v-if="data.statusCode == 200" v-for="feed in data.data">
+    <a :href="feed.link">
+      <div>
+        <p class="text-3xl">{{ feed.title }}</p>
+        <p class="text-xs">{{ feed.description }}</p>
+      </div>
+    </a>
     <br>
   </div>
-
+  <div v-else>
+    <p>Error while reading the data: </p>
+    <p>{{ data.err.statusCode }}</p>
+    <p>{{ data.err.message }}</p>
+  </div>
 </template>
 
 <script setup>
-    const { data } = await useFetch("/api/feeds");
+  const { data } = await useFetch("/api/feeds");
 </script>
