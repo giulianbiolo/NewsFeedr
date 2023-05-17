@@ -1,13 +1,9 @@
 <template>
-  <h1>Welcome to NewsFeedr!</h1>
-
-  <div style="height: 40px;"></div>
-
   <div v-if="data.statusCode == 200" v-for="feed in data.feeds">
     <a :href="feed.link">
       <div>
         <p class="text-3xl">{{ feed.title }}</p>
-        <p class="text-xs">{{ feed.body }}</p>
+        <p class="text-xs">{{ feed.description }}</p>
       </div>
     </a>
     <br>

@@ -5,7 +5,7 @@ class HttpManager {
     this.baseApiUrl = baseApiUrl;
   }
 
-  public async get<T>(url?: string, headers?: HeadersInit): Promise<T> {
+  public async get<T>(url?: string, headers?: HeadersInit): Promise<T | Response> {
     url = url || '';
     const apiUrl = `${this.baseApiUrl}/${url}`;
 
@@ -18,11 +18,15 @@ class HttpManager {
       throw new Error(`Error getting data from ${apiUrl}: ${response.statusText}`);
     }
 
-    const data = JSON.stringify(response) as T;
-    return data;
+    if (response.headers.get('content-type')?.includes('application/json')) {
+      const data = await response.json() as T;
+      return data;
+    } else {
+      return response as Response;
+    }
   }
 
-  public async post<T>(url?: string, data?: any, headers?: HeadersInit): Promise<T> {
+  public async post<T>(url?: string, data?: any, headers?: HeadersInit): Promise<T | Response> {
     url = url || '';
     const apiUrl = `${this.baseApiUrl}/${url}`;
     const response = await fetch(apiUrl, {
@@ -35,8 +39,12 @@ class HttpManager {
       throw new Error(`Error posting data to ${apiUrl}: ${response.statusText}`);
     }
 
-    const responseData = JSON.stringify(response) as T;
-    return responseData;
+    if (response.headers.get('content-type')?.includes('application/json')) {
+      const responseData = await response.json() as T;
+      return responseData;
+    } else {
+      return response as Response;
+    }
   }
 }
 
