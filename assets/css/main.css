@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 .prettier-scrollbar {
   --sb-track-color: rgb(125, 114, 89);
   --sb-thumb-color: rgb(239, 153, 149);

@@ -4,7 +4,7 @@
     <input id="custom_sidebar" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content bg-base-200 mt-[5rem] block p-4 h-full overflow-y-scroll prettier-scrollbar">
       <!-- Page content here -->
-      <div class="card bg-base-100 shadow-xl">
+      <div class="card bg-base-100 shadow-xl h-[87vh]">
         <slot />
       </div>
     </div>
@@ -25,7 +25,7 @@
 useHead({
   htmlAttrs: {
     lang: 'en',
-    'data-theme': 'lofi',
+    'data-theme': 'dark',
   },
 })
 </script>
