@@ -1,7 +1,13 @@
 import Magazine from "~/models/magazine";
 import MagazineManager from "~/server/managers/db/magazineManager";
+import { getServerSession } from "#auth";
 
-export default defineEventHandler(async (_event) => {
+export default defineEventHandler(async (event) => {
+  const session = await getServerSession(event);
+  if (!session) {
+    return { status: 'unauthenticated!', statusCode: 403, };
+  }
+
   const db = MagazineManager.getInstance();
 
   try {

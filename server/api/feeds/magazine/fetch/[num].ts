@@ -1,9 +1,14 @@
-import Feed from "~/models/feed";
 import DbFeedManager from "~/server/managers/db/feedManager";
 import DbMagazineManager from "~/server/managers/db/magazineManager";
 import HttpFeedManager from "~/server/managers/http/feedManager";
+import { getServerSession } from "#auth";
 
 export default defineEventHandler(async (event) => {
+  const session = await getServerSession(event);
+  if (!session) {
+    return { status: 'unauthenticated!', statusCode: 403, };
+  }
+
   let num = event.context.params?.num;
   const magazineManager = DbMagazineManager.getInstance();
 
