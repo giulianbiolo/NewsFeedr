@@ -22,7 +22,6 @@ class DbAuthManager extends DbManager {
     try {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
-      // const query = { email: credentials.email, password: credentials.password }
       const query = { email: credentials.email }
       const result = await collection.findOne(query) as User | null;
 
@@ -33,6 +32,21 @@ class DbAuthManager extends DbManager {
       }
     } catch (err) {
       throw createError({ statusCode: 500, statusMessage: `Cannot get the user, error: ${err}` });
+    }
+  }
+
+  async register(credentials: User): Promise<void> {
+    try {
+      const database = this.client.db(dbName);
+      const collection = database.collection(collectionName);
+
+      if (await collection.findOne({ email: credentials.email }) == null) {
+        await collection.insertOne(credentials);
+      }
+
+      return;
+    } catch (err) {
+      throw createError({ statusCode: 500, statusMessage: `Cannot register the user, error: ${err}` });
     }
   }
 }

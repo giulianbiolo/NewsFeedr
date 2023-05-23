@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   const db = DbFeedManager.getInstance();
 
   try {
-    db.putFeeds(body);
+    await db.putFeeds(body);
     return { statusCode: 200 };
   } catch (err) {
     return { err }
