@@ -1,5 +1,7 @@
 <template>
-  <div v-if="data.statusCode == 200" v-for="feed in data.data">
+  <button v-if="isLogged()" class="btn btn-primary" @click="logOut">LogOut</button>
+  <button v-else class="btn btn-primary" @click="logIn">LogIn</button>
+  <div v-for="feed in data.data">
     <a :href="feed.link">
       <div>
         <p class="text-3xl">{{ feed.title }}</p>
@@ -8,13 +10,21 @@
     </a>
     <br>
   </div>
-  <div v-else>
-    <p>Error while reading the data: </p>
-    <p>{{ data.err.statusCode }}</p>
-    <p>{{ data.err.message }}</p>
-  </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
   const { data } = await useFetch("/api/feeds");
+  const { status, signOut } = useAuth();
+
+  const isLogged = (): boolean => {
+    return status.value == "authenticated";
+  }
+
+  const logOut = async () => {
+    await signOut();
+  };
+
+  const logIn = () => {
+    return navigateTo("/login");
+  };
 </script>

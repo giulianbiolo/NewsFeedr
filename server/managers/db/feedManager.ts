@@ -61,9 +61,8 @@ class DbFeedManager extends DbManager {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
 
-
       for (const feed of feeds) {
-        if (!collection.findOne({ link: feed.link })) {
+        if (await collection.findOne({ link: feed.link }) == null) {
           await collection.insertOne(feed);
         }
       }
