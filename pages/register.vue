@@ -3,8 +3,8 @@
     <div class="hero-content flex-col lg:flex-row-reverse">
       <div class="text-center lg:text-left">
         <h1 class="text-5xl font-bold">Register now!</h1>
-        <p class="py-6">Join our community of readers by creating your own personalized account. 
-        You'll be able to save your favorite posts, subscribe to magazines, and more.</p>
+        <p class="py-6">Join our community of readers by creating your own personalized account.
+          You'll be able to save your favorite posts, subscribe to magazines, and more.</p>
       </div>
       <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <div class="card-body">
@@ -27,7 +27,7 @@
             <label class="label">
               <span class="label-text">Email</span>
             </label>
-            <input type="text" placeholder="Email" class="input input-bordered" v-model="email"/>
+            <input type="text" placeholder="Email" class="input input-bordered" v-model="email" />
           </div>
 
           <div class="form-control">
@@ -41,7 +41,7 @@
             <label class="label">
               <span class="label-text">Confirm Password</span>
             </label>
-            <input type="password" placeholder="Confirm Password" class="input input-bordered" v-model="password_2"/>
+            <input type="password" placeholder="Confirm Password" class="input input-bordered" v-model="password_2" />
             <label class="label">
               <label class="label">
                 <router-link to="/login" class="label-text-alt link link-hover">Already have an account?</router-link>
@@ -50,7 +50,8 @@
           </div>
 
           <div class="form-control mt-6">
-              <button class="btn btn-primary" @click="register()">Register</button>
+            <button class="btn btn-primary"
+              @click="register(name, surname, email, password_1, password_2)">Register</button>
           </div>
         </div>
       </div>
@@ -74,7 +75,13 @@ const password_1 = useState<string>("password_1");
 const password_2 = useState<string>("password_2");
 
 
-const register = async (name: string, surname: string, email: string, password_1: string, password_2: string) => {
+const register = async (
+  name: string,
+  surname: string,
+  email: string,
+  password_1: string,
+  password_2: string
+) => {
   const { signIn } = useAuth();
 
   if (password_1 === password_2) {
