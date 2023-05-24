@@ -1,11 +1,12 @@
 import Feed from "~/models/feed";
 import DbFeedManager from "~/server/managers/db/feedManager";
 import { getServerSession } from "#auth";
+import HttpResponse from "~/models/http_response";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<HttpResponse> => {
   const session = await getServerSession(event);
   if (!session) {
-    return { status: 'unauthenticated!', statusCode: 403, };
+    return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
   }
 
   let num = event.context.params?.num;
@@ -18,8 +19,8 @@ export default defineEventHandler(async (event) => {
   let feeds: Feed[] = [];
   try {
     feeds = await db.getLastNFeeds(parseInt(num));
-    return { status: 200, body: feeds };
+    return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
-    return err;
+    return { err } as HttpResponse;
   }
 })

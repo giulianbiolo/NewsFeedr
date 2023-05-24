@@ -11,21 +11,24 @@
     <div class="drawer-side lg:sticky mt-[5rem]">
       <label for="custom_sidebar" class="drawer-overlay"></label>
       <ul class="menu p-4 w-80 bg-base-100 text-base-content">
-        <!-- Sidebar content here -->
-        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>
-        <!-- Automatically load the dynamic sidebar for the user -->
+        <!-- Show the magazines -->
+        <div v-if="data" v-for="magazine in data.data">
+          <li><a :href="`/api/feeds/magazine/${magazine.progr}`">{{ magazine.name }}</a></li>
+        </div>
       </ul>
-
     </div>
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import HttpResponse from '~/models/http_response';
+
 useHead({
   htmlAttrs: {
     lang: 'en',
     'data-theme': 'dark',
   },
-})
+});
+
+const {data} = await useFetch("/api/feeds/magazine") as HttpResponse; 
 </script>

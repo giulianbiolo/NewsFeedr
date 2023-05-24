@@ -24,7 +24,8 @@
             </a>
           </li>
           <li><a>Settings</a></li>
-          <li><a>Logout</a></li>
+          <button v-if="isLogged()" class="btn btn-primary" @click="logOut">LogOut</button>
+          <button v-else class="btn btn-primary" @click="logIn">LogIn</button>
         </ul>
       </div>
     </div>
@@ -32,14 +33,21 @@
 </template>
 
 
-<script>
+<script setup lang="ts">
 import { Bars3Icon } from "@heroicons/vue/24/solid";
 import LogoSvg from "~/components/LogoSvg.vue";
+const { status, signOut } = useAuth();
 
-export default {
-  components: {
-    Bars3Icon,
-    LogoSvg,
-  }
+const isLogged = (): boolean => {
+  return status.value == "authenticated";
 }
+
+const logOut = async () => {
+  await signOut();
+};
+
+const logIn = () => {
+  return navigateTo("/login");
+};
+
 </script>

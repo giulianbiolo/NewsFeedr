@@ -1,19 +1,20 @@
 import Feed from "~/models/feed";
 import DbFeedManager from "~/server/managers/db/feedManager";
 import {getServerSession} from "#auth";
+import HttpResponse from "~/models/http_response";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<HttpResponse>  => {
   const session = await getServerSession(event);
   if (!session) {
-    return { status: 'unauthenticated!', statusCode: 403, };
+    return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
   }
 
   const db = DbFeedManager.getInstance();
 
   try {
     const feeds: Feed[] = await db.getFeeds();
-    return { statusCode: 200, data: feeds };
+    return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
-    return { err }
+    return { err } as HttpResponse;
   }
 })

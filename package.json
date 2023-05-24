@@ -18,9 +18,13 @@
     "@fortawesome/fontawesome-free": "^6.4.0",
     "@heroicons/vue": "^2.0.17",
     "@nuxtjs/tailwindcss": "^6.6.8",
+    "@sidebase/nuxt-auth": "^0.6.0-beta.2",
+    "@types/bcryptjs": "^2.4.2",
+    "bcryptjs": "^2.4.3",
     "daisyui": "^2.51.6",
     "jsdom": "^22.0.0",
     "mongodb": "^5.5.0",
-    "npm": "^9.6.6"
+    "npm": "^9.6.6",
+    "nuxt-auth": "^2.0.10"
   }
 }

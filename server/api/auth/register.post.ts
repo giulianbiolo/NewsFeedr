@@ -1,7 +1,8 @@
 import DbAuthManager from "~/server/managers/db/authManager";
 import bcrypt from 'bcryptjs';
+import HttpResponse from "~/models/http_response";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<HttpResponse> => {
   const body = await readBody(event);
   const db = DbAuthManager.getInstance();
 
@@ -19,6 +20,6 @@ export default defineEventHandler(async (event) => {
     return { statusCode: 200 };
 
   } catch (err) {
-    return { err }
+    return { err } as HttpResponse;
   }
 })

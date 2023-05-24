@@ -1,7 +1,5 @@
 <template>
-  <button v-if="isLogged()" class="btn btn-primary" @click="logOut">LogOut</button>
-  <button v-else class="btn btn-primary" @click="logIn">LogIn</button>
-  <div v-for="feed in data.data">
+  <div v-if="data" v-for="feed in data.data">
     <a :href="feed.link">
       <div>
         <p class="text-3xl">{{ feed.title }}</p>
@@ -13,18 +11,20 @@
 </template>
 
 <script setup lang="ts">
-  const { data } = await useFetch("/api/feeds");
-  const { status, signOut } = useAuth();
+import HttpResponse from '~/models/http_response';
 
-  const isLogged = (): boolean => {
-    return status.value == "authenticated";
-  }
+definePageMeta({
+  middleware: [
+    function () {
+      const {status} = useAuth();
 
-  const logOut = async () => {
-    await signOut();
-  };
+      if (status.value !== "authenticated") {
+          return navigateTo('/login')
+      }
+    }
+  ],
+});
 
-  const logIn = () => {
-    return navigateTo("/login");
-  };
+
+var { data } = await useFetch("/api/feeds") as HttpResponse;
 </script>

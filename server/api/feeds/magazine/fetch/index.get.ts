@@ -4,11 +4,12 @@ import DbFeedManager from "~/server/managers/db/feedManager";
 import DbMagazineManager from "~/server/managers/db/magazineManager";
 import HttpFeedManager from "~/server/managers/http/feedManager";
 import { getServerSession } from "#auth";
+import HttpResponse from "~/models/http_response";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<HttpResponse> => {
   const session = await getServerSession(event);
   if (!session) {
-    return { status: 'unauthenticated!', statusCode: 403, };
+    return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
   }
 
   const magazineManager = DbMagazineManager.getInstance();
@@ -17,7 +18,7 @@ export default defineEventHandler(async (event) => {
   try {
     magazines = await magazineManager.getMagazines();
   } catch (err) {
-    return err;
+    return { err } as HttpResponse;
   }
 
   let allFeeds: Feed[] = [];
@@ -38,5 +39,5 @@ export default defineEventHandler(async (event) => {
     } catch (err) { }
   }
 
-  return { statusCode: 200, body: allFeeds };
+  return { statusCode: 200, data: allFeeds } as HttpResponse;
 })
