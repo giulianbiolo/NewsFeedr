@@ -21,7 +21,7 @@
             </label>
             <input type="password" placeholder="Password" class="input input-bordered" v-model="password" />
             <label class="label">
-              <router-link to="/register" class="label-text-alt link link-hover">Don't have an account yet?</router-link>
+              <router-link to="/register" class="label-text-alt link link-hover">Don't have an account yet? Register now.</router-link>
             </label>
           </div>
 

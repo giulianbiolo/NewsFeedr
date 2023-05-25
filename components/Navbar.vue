@@ -10,10 +10,10 @@
       <div class="flex-auto form-control">
         <input type="text" placeholder="Search" class="input input-bordered" />
       </div>
-      <div class="flex-none dropdown dropdown-end">
+      <div  v-if="isLogged()" class="flex-none dropdown dropdown-end">
         <label tabindex="0" class="btn btn-ghost btn-circle avatar">
           <div class="w-10 rounded-full">
-            <img src="https://api.dicebear.com/6.x/initials/svg?seed=Felix" />
+            <img :src="'https://api.dicebear.com/6.x/initials/svg?seed=' + data?.user?.name"/>
           </div>
         </label>
         <ul tabindex="0" class="mt-3 p-2 shadow menu menu-compact dropdown-content bg-base-100 rounded-box w-52">
@@ -24,8 +24,7 @@
             </a>
           </li>
           <li><a>Settings</a></li>
-          <button v-if="isLogged()" class="btn btn-primary" @click="logOut">LogOut</button>
-          <button v-else class="btn btn-primary" @click="logIn">LogIn</button>
+          <button v-if="isLogged()" class="btn btn-primary mx-4" @click="logOut">LogOut</button>
         </ul>
       </div>
     </div>
@@ -36,7 +35,7 @@
 <script setup lang="ts">
 import { Bars3Icon } from "@heroicons/vue/24/solid";
 import LogoSvg from "~/components/LogoSvg.vue";
-const { status, signOut } = useAuth();
+const { status, signOut, data } = useAuth();
 
 const isLogged = (): boolean => {
   return status.value == "authenticated";

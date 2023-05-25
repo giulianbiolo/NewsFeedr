@@ -44,7 +44,7 @@
             <input type="password" placeholder="Confirm Password" class="input input-bordered" v-model="password_2" />
             <label class="label">
               <label class="label">
-                <router-link to="/login" class="label-text-alt link link-hover">Already have an account?</router-link>
+                <router-link to="/login" class="label-text-alt link link-hover">Already have an account? Login now.</router-link>
               </label>
             </label>
           </div>
