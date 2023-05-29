@@ -15,11 +15,14 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
     };
 
     body.password = await hashPassword(body.password);
-    await db.register(body);
+    const result = await db.register(body);
 
-    return { statusCode: 200 };
-
+    return { statusCode: 200, data: JSON.stringify(result) } as HttpResponse;
   } catch (err) {
-    return { err } as HttpResponse;
+    return {
+      statusCode: (err as HttpResponse).statusCode,
+      error: (err as HttpResponse).statusMessage,
+      statusMessage: (err as HttpResponse).statusMessage
+    } as HttpResponse;
   }
 })

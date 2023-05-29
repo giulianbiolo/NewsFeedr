@@ -44,14 +44,14 @@
             <input type="password" placeholder="Confirm Password" class="input input-bordered" v-model="password_2" />
             <label class="label">
               <label class="label">
-                <router-link to="/login" class="label-text-alt link link-hover">Already have an account? Login now.</router-link>
+                <router-link to="/login" class="label-text-alt link link-hover">Already have an account? Login now</router-link>
               </label>
             </label>
           </div>
 
           <div class="form-control mt-6">
             <button class="btn btn-primary"
-              @click="register(name, surname, email, password_1, password_2)">Register</button>
+              @click="register()">Register</button>
           </div>
         </div>
       </div>
@@ -60,6 +60,8 @@
 </template>
 
 <script setup lang="ts">
+import HttpResponse from '~/models/http_response';
+
 definePageMeta({
   middleware: "auth",
   auth: {
@@ -75,38 +77,29 @@ const password_1 = useState<string>("password_1");
 const password_2 = useState<string>("password_2");
 
 
-const register = async (
-  name: string,
-  surname: string,
-  email: string,
-  password_1: string,
-  password_2: string
-) => {
+const register = async () => {
   const { signIn } = useAuth();
 
-  if (password_1 === password_2) {
-    const credentials = {
-      name: name,
-      surname: surname,
-      email: email,
-      password: password_1,
-    };
-
-    try {
-      await useFetch('/api/auth/register', {
-        method: 'POST',
-        body: JSON.stringify(credentials),
-      });
-
-      await signIn('credentials', { email: email, password: password_1, callbackUrl: '/' });
-
-      return navigateTo('/');
-    } catch (error) {
-      alert(error);
-    }
-
-  } else {
+  if (password_1.value !== password_2.value) {
     alert("Passwords do not match");
   }
-}
+
+  const credentials = {
+    name: name.value,
+    surname: surname.value,
+    email: email.value,
+    password: password_1.value,
+  };
+
+  try {
+    const resultRegister = await useFetch('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    }) as HttpResponse;
+
+    await signIn('credentials', { email: email, password: password_1, callbackUrl: '/' });
+  } catch (error) {
+    alert(`Error: ${error}`);
+  }
+ }
 </script>

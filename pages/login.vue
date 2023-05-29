@@ -20,8 +20,13 @@
               <span class="label-text">Password</span>
             </label>
             <input type="password" placeholder="Password" class="input input-bordered" v-model="password" />
+
             <label class="label">
               <router-link to="/register" class="label-text-alt link link-hover">Don't have an account yet? Register now.</router-link>
+            </label>
+
+            <label class="label">
+              <router-link to="/password_reset" class="label-text-alt link link-hover">Reset your password!</router-link>
             </label>
           </div>
 

@@ -1,7 +1,7 @@
 export default interface HttpResponse {
   url?: string;
   statusCode?: number;
-  statusMessage?: number;
+  statusMessage?: string;
   data?: any;
   error?: any;
 }

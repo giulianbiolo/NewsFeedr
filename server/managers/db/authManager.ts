@@ -40,10 +40,11 @@ class DbAuthManager extends DbManager {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
 
-      if (await collection.findOne({ email: credentials.email }) == null) {
-        await collection.insertOne(credentials);
+      if (await collection.findOne({ email: credentials.email }) != null) {
+        throw createError({ statusCode: 500, statusMessage: `Email already registered, try another` });
       }
 
+      await collection.insertOne(credentials);
       return;
     } catch (err) {
       throw createError({ statusCode: 500, statusMessage: `Cannot register the user, error: ${err}` });
