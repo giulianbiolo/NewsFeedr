@@ -41,7 +41,6 @@
 
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -49,18 +48,25 @@
   </div>
 </template>
 
-<script lang="ts">
-export default defineComponent({
-  data() {
-    return {
-      email: '',
-      password: '',
-    };
-  },
-  methods: {
-    login() {
-      // Aggiungi qui la logica per il login
-    },
-  },
+<script setup lang="ts">
+definePageMeta({
+  middleware: "auth",
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: '/',
+  }
 });
+
+const { signIn } = useAuth();
+const email = useState<string>('email');
+const password = useState<string>('password');
+
+const mySignInHandler = async ({ email, password }: { email: string, password: string }) => {
+  const result = await signIn('credentials', { email: email, password: password, callbackUrl: '/' });
+  if (result?.error) {
+    alert('You have made a terrible mistake while entering your credentials');
+  } else {
+    return navigateTo('/');
+  }
+}
 </script>

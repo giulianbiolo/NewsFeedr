@@ -1,12 +1,12 @@
 <template>
-  <Navbar />
-  <div class="drawer drawer-mobile">
+  <div class="drawer drawer-mobile bg-base-200 shadow">
     <input id="custom_sidebar" type="checkbox" class="drawer-toggle" />
-    <div class="drawer-content bg-base-200 mt-[5rem] block p-4 h-full overflow-y-scroll prettier-scrollbar">
+    <div class="drawer-content">
       <!-- Page content here -->
-      <div class="card bg-base-100 shadow-xl h-[87vh]">
-        <slot />
-      </div>
+      <Navbar />
+      
+            <slot />
+         
     </div>
     <div class="drawer-side bg-base-100">
       <label for="custom_sidebar" class="drawer-overlay h-[90vh]"></label>
@@ -28,11 +28,14 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+import HttpResponse from '~/models/http_response';
+import LogoSvg from '~/components/LogoSvg.vue';
 useHead({
   htmlAttrs: {
     lang: 'en',
     'data-theme': 'dark',
   },
-})
+});
+const { data } = await useFetch("/api/feeds/magazine") as HttpResponse; 
 </script>

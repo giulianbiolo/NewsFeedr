@@ -53,6 +53,7 @@
                     </label>
                   </label>
                 </div>
+
                 <div class="form-control mt-6">
                   <button class="btn btn-primary" @click="register()">Register</button>
                 </div>
@@ -65,22 +66,47 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import HttpResponse from '~/models/http_response';
 
-export default defineComponent({
-  data() {
-    return {
-      nome: '',
-      cognome: '',
-      data_nascita: '',
-      email: '',
-      password: '',
-    };
-  },
-  methods: {
-    register() {
-      // Aggiungi qui la logica per la registrazione
-    },
-  },
+definePageMeta({
+  middleware: "auth",
+  auth: {
+    unauthenticatedOnly: true,
+    navigateAuthenticatedTo: '/',
+  }
 });
+
+const name = useState<string>("name");
+const surname = useState<string>("surname");
+const email = useState<string>("email");
+const password_1 = useState<string>("password_1");
+const password_2 = useState<string>("password_2");
+
+
+const register = async () => {
+  const { signIn } = useAuth();
+
+  if (password_1.value !== password_2.value) {
+    alert("Passwords do not match");
+  }
+
+  const credentials = {
+    name: name.value,
+    surname: surname.value,
+    email: email.value,
+    password: password_1.value,
+  };
+
+  try {
+    const resultRegister = await useFetch('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(credentials),
+    }) as HttpResponse;
+
+    await signIn('credentials', { email: email, password: password_1, callbackUrl: '/' });
+  } catch (error) {
+    alert(`Error: ${error}`);
+  }
+}
 </script>
