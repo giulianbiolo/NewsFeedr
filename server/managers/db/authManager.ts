@@ -50,6 +50,25 @@ class DbAuthManager extends DbManager {
       throw createError({ statusCode: 500, statusMessage: `Cannot register the user, error: ${err}` });
     }
   }
+
+  async password_reset(credentials: User): Promise<void> {
+    try {
+      const database = this.client.db(dbName);
+      const collection = database.collection(collectionName);
+
+      const query = { email: credentials.email };
+      const update = { $set: { password: credentials.password } };
+
+      if (await collection.findOne(query) == null) {
+        throw createError({ statusCode: 500, statusMessage: `Cannot find a user with this email` });
+      }
+
+      await collection.updateOne(query, update);
+      return;
+    } catch (err) {
+      throw createError({ statusCode: 500, statusMessage: `Cannot register the user, error: ${err}` });
+    }
+  }
 }
 
 export default DbAuthManager;

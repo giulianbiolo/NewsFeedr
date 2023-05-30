@@ -37,6 +37,7 @@
 
 <script setup lang="ts">
 import HttpResponse from '~/models/http_response';
+const {data} = useAuth();
 
 definePageMeta({
   middleware: [
@@ -60,7 +61,7 @@ const passwordChangeHandler = async () => {
 
   const credentials = {
     // TODO: prendere la mail da auth
-    email: "demo@test.com",
+    email: data.value?.user?.email || '',
     password: password_1.value,
   };
 

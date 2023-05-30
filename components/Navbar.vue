@@ -44,9 +44,4 @@ const isLogged = (): boolean => {
 const logOut = async () => {
   await signOut();
 };
-
-const logIn = () => {
-  return navigateTo("/login");
-};
-
 </script>
