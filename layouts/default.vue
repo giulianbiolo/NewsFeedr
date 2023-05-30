@@ -4,9 +4,7 @@
     <div class="drawer-content">
       <!-- Page content here -->
       <Navbar />
-      
-            <slot />
-         
+      <slot />
     </div>
     <div class="drawer-side bg-base-100">
       <label for="custom_sidebar" class="drawer-overlay h-[90vh]"></label>
@@ -29,6 +27,7 @@
 </template>
 
 <script setup lang="ts">
+import { useHead } from 'unhead';
 import HttpResponse from '~/models/http_response';
 import LogoSvg from '~/components/LogoSvg.vue';
 useHead({
