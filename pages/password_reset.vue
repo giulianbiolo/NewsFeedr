@@ -10,6 +10,7 @@
             </div>
             <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
               <div class="card-body">
+                <span class="text-sm text-error">{{ error ]}</span>
 
                 <div class="form-control">
                   <label class="label">
@@ -59,35 +60,29 @@ definePageMeta({
   }
 });
 
-// const { signIn } = useAuth();
 const email = useState<string>('email');
 const password_1 = useState<string>('password_1');
 const password_2 = useState<string>('password_2');
 
-const passwordResetHandler = async () => {
-  if (password_1.value !== password_2.value) {
-    alert("Passwords do not match");
-  }
+let error = '';
 
+const passwordResetHandler = async () => {
   const credentials = {
     email: email.value,
     password: password_1.value,
   };
 
-  try {
-    const result = await useFetch('/api/auth/password-reset', {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    }) as HttpResponse;
+  const result = (await useFetch('/api/auth/password-reset', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })).data.value as HttpResponse;
 
-    if (result.error) {
-      alert(`Error: ${result.error}`);
-    } else {
-      alert("Password reset successful");
-      return navigateTo('/login');
-    }
-  } catch (error) {
-    alert(`Error: ${error}`);
+  if (result.statusCode != 200) {
+    error = `Error: ${result.statusMessage}`;
+    return;
   }
+
+  alert("Password reset successful");
+  return navigateTo('/login');
 }
 </script>

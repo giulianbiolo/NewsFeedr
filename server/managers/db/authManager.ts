@@ -19,56 +19,48 @@ class DbAuthManager extends DbManager {
   }
 
   async findOne(credentials: User): Promise<User | null> {
-    try {
-      const database = this.client.db(dbName);
-      const collection = database.collection(collectionName);
-      const query = { email: credentials.email }
-      const result = await collection.findOne(query) as User | null;
+    const database = this.client.db(dbName);
+    const collection = database.collection(collectionName);
+    const query = { email: credentials.email }
+    const result = await collection.findOne(query) as User | null;
 
-      if (!result || result == {} as User) {
-        return null;
-      } else {
-        return result;
-      }
-    } catch (err) {
-      throw createError({ statusCode: 500, statusMessage: `Cannot get the user, error: ${err}` });
+    if (!result || result == {} as User) {
+      return null;
+    } else {
+      return result;
     }
   }
 
   async register(credentials: User): Promise<void> {
-    try {
-      const database = this.client.db(dbName);
-      const collection = database.collection(collectionName);
+    const database = this.client.db(dbName);
+    const collection = database.collection(collectionName);
 
-      if (await collection.findOne({ email: credentials.email }) != null) {
-        throw createError({ statusCode: 500, statusMessage: `Email already registered, try another` });
-      }
-
-      await collection.insertOne(credentials);
-      return;
-    } catch (err) {
-      throw createError({ statusCode: 500, statusMessage: `Cannot register the user, error: ${err}` });
+    if (await collection.findOne({ email: credentials.email }) != null) {
+      throw createError({ statusCode: 500, statusMessage: `Email already registered, try another` });
     }
+
+    await collection.insertOne(credentials);
+    return;
   }
 
   async password_reset(credentials: User): Promise<void> {
-    try {
-      const database = this.client.db(dbName);
-      const collection = database.collection(collectionName);
+    const database = this.client.db(dbName);
+    const collection = database.collection(collectionName);
 
-      const query = { email: credentials.email };
-      const update = { $set: { password: credentials.password } };
+    const query = { email: credentials.email };
+    const update = { $set: { password: credentials.password } };
 
-      if (await collection.findOne(query) == null) {
-        throw createError({ statusCode: 500, statusMessage: `Cannot find a user with this email` });
-      }
-
-      await collection.updateOne(query, update);
-      return;
-    } catch (err) {
-      throw createError({ statusCode: 500, statusMessage: `Cannot register the user, error: ${err}` });
+    if (await collection.findOne(query) == null) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: `User with email "${credentials.email}" not found!`
+      });
     }
+
+    await collection.updateOne(query, update);
+    return;
   }
+
 }
 
 export default DbAuthManager;
