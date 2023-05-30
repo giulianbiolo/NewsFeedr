@@ -8,15 +8,22 @@
         <slot />
       </div>
     </div>
-    <div class="drawer-side lg:sticky mt-[5rem]">
-      <label for="custom_sidebar" class="drawer-overlay"></label>
-      <ul class="menu p-4 w-80 bg-base-100 text-base-content">
-        <!-- Sidebar content here -->
-        <li><a>Sidebar Item 1</a></li>
-        <li><a>Sidebar Item 2</a></li>
-        <!-- Automatically load the dynamic sidebar for the user -->
+    <div class="drawer-side bg-base-100">
+      <label for="custom_sidebar" class="drawer-overlay h-[90vh]"></label>
+      <ul class="menu p-4 overflow-y-auto w-60 bg-base-100 text-base-content flex-nowrap h-screen">
+        <!-- Show the magazines -->
+        <div class="hidden md:inline mb-10">
+          <LogoSvg className="w-48 h-12" isDark />
+        </div>
+        <div v-if="data && data.data && data.data.length > 0">
+          <li class="menu-title">
+            <span>Magazines</span>
+          </li>
+          <div v-for="magazine in data.data">
+            <li><a :href="`/api/feeds/magazine/${magazine.progr}`">{{ magazine.name }}</a></li>
+          </div>
+        </div>
       </ul>
-
     </div>
   </div>
 </template>
