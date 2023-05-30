@@ -1,39 +1,47 @@
 <template>
-  <div class="hero h-full">
-    <div class="hero-content flex-col lg:flex-row-reverse">
-      <div class="text-center lg:text-left">
-        <h1 class="text-5xl font-bold">Login now!</h1>
-        <p class="py-6">Enter your email and password to access your personalized feed and saved posts.</p>
-      </div>
-      <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-        <div class="card-body">
+  <div class="px-4 pt-4">
+    <div class="card bg-base-100 block shadow-lg h-full">
+      <div class="card-body relative h-full overflow-hidden p-0">
+        <div class="hero h-full">
+          <div class="hero-content flex-col lg:flex-row-reverse">
+            <div class="text-center lg:text-left">
+              <h1 class="text-5xl font-bold">Login now!</h1>
+              <p class="py-6">Enter your email and password to access your personalized feed and saved posts.</p>
+            </div>
+            <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
+              <div class="card-body">
 
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Email</span>
-            </label>
-            <input type="text" placeholder="Email" class="input input-bordered" v-model="email" />
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Email</span>
+                  </label>
+                  <input type="text" placeholder="Email" class="input input-bordered" v-model="email" />
+                </div>
+
+                <div class="form-control">
+                  <label class="label">
+                    <span class="label-text">Password</span>
+                  </label>
+                  <input type="password" placeholder="Password" class="input input-bordered" v-model="password" />
+
+                  <label class="label">
+                    <router-link to="/register" class="label-text-alt link link-hover">Don't have an account yet? Register
+                      now.</router-link>
+                  </label>
+
+                  <label class="label">
+                    <router-link to="/password_reset" class="label-text-alt link link-hover">Reset your
+                      password!</router-link>
+                  </label>
+                </div>
+
+                <div class="form-control mt-6">
+                  <button class="btn btn-primary" @click="mySignInHandler({ email, password })">Login</button>
+                </div>
+
+              </div>
+            </div>
           </div>
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Password</span>
-            </label>
-            <input type="password" placeholder="Password" class="input input-bordered" v-model="password" />
-
-            <label class="label">
-              <router-link to="/register" class="label-text-alt link link-hover">Don't have an account yet? Register now.</router-link>
-            </label>
-
-            <label class="label">
-              <router-link to="/password_reset" class="label-text-alt link link-hover">Reset your password!</router-link>
-            </label>
-          </div>
-
-          <div class="form-control mt-6">
-            <button class="btn btn-primary" @click="mySignInHandler({ email, password })">Login</button>
-          </div>
-
         </div>
       </div>
     </div>
