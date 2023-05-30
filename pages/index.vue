@@ -9,7 +9,7 @@
                 @click="openModalWithData(feed)">
                 <td>
                   <!-- Modify it to have onclick toggle a yellow color or neutral -->
-                  <div class="btn btn-ghost btn-square" @click="toggleBookmark(feed.link)">
+                  <div class="btn btn-ghost btn-square" @click="toggleBookmark(feed.link); openModalWithData(feed);">
                     <BookmarkIcon class="h-6 w-6"
                       :class="isBookmarked(feed.link) ? 'text-yellow-500' : 'text-gray-500'" />
                   </div>
