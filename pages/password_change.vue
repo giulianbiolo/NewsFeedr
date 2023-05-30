@@ -2,18 +2,11 @@
   <div class="hero h-full">
     <div class="hero-content flex-col lg:flex-row-reverse">
       <div class="text-center lg:text-left">
-        <h1 class="text-5xl font-bold">Reset your password!</h1>
-        <p class="py-6">If you've forgotten your password, don't worry! Just enter your email and new password.</p>
+        <h1 class="text-5xl font-bold">Change your password!</h1>
+        <p class="py-6">Want to change your password? Enter the new one!</p>
       </div>
       <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
         <div class="card-body">
-
-          <div class="form-control">
-            <label class="label">
-              <span class="label-text">Email</span>
-            </label>
-            <input type="text" placeholder="Email" class="input input-bordered" v-model="email" />
-          </div>
 
           <div class="form-control">
             <label class="label">
@@ -33,7 +26,7 @@
           </div>
 
           <div class="form-control mt-6">
-            <button class="btn btn-primary" @click="passwordResetHandler()">Reset Password</button>
+            <button class="btn btn-primary" @click="passwordChangeHandler()">Change Password</button>
           </div>
 
         </div>
@@ -46,25 +39,28 @@
 import HttpResponse from '~/models/http_response';
 
 definePageMeta({
-  middleware: "auth",
-  auth: {
-    unauthenticatedOnly: true,
-    navigateAuthenticatedTo: '/',
-  }
+  middleware: [
+    function () {
+      const {status} = useAuth();
+
+      if (status.value !== "authenticated") {
+          return navigateTo('/login')
+      }
+    }
+  ],
 });
 
-// const { signIn } = useAuth();
-const email = useState<string>('email');
 const password_1 = useState<string>('password_1');
 const password_2 = useState<string>('password_2');
 
-const passwordResetHandler = async () => {
+const passwordChangeHandler = async () => {
   if (password_1.value !== password_2.value) { 
     alert("Passwords do not match");
   }
 
   const credentials = {
-    email: email.value,
+    // TODO: prendere la mail da auth
+    email: "demo@test.com",
     password: password_1.value,
   };
 
@@ -80,6 +76,7 @@ const passwordResetHandler = async () => {
       alert("Password reset successful");
       return navigateTo('/login');
     }
+
   } catch (error) {
     alert(`Error: ${error}`);
   }
