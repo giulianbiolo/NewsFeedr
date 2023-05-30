@@ -6,7 +6,7 @@
       <Navbar />
       <div class="px-4 pt-4">
         <div class="card bg-base-100 block shadow-lg h-full">
-          <div class="card-body relative h-full overflow-hidden">
+          <div class="card-body relative h-full overflow-hidden p-0">
             <slot />
           </div>
         </div>
