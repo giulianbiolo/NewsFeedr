@@ -1,6 +1,6 @@
 <template>
   <div class="px-4 pt-4">
-    <div class="card bg-base-100 block shadow-lg h-full">
+    <div class="card bg-base-100 block shadow-lg h-[87vh]">
       <div class="card-body relative h-full overflow-hidden p-0">
         <div class="hero h-full">
           <div class="hero-content flex-col lg:flex-row-reverse">

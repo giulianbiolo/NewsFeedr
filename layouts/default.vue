@@ -15,11 +15,11 @@
         <div class="hidden md:inline mb-10">
           <LogoSvg className="w-48 h-12" isDark />
         </div>
-        <div>
+        <div v-if="data && data.data && data.data.length > 0">
           <li class="menu-title">
             <span>Magazines</span>
           </li>
-          <div v-if="data" v-for="magazine in data.data">
+          <div v-for="magazine in data.data">
             <li><a :href="`/api/feeds/magazine/${magazine.progr}`">{{ magazine.name }}</a></li>
           </div>
         </div>
