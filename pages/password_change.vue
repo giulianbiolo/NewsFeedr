@@ -91,7 +91,7 @@ const passwordResetHandler = async () => {
   })).data.value as HttpResponse;
 
   if (result.statusCode != 200) {
-    error.value = `Error: ${result.statusMessage}`;
+    error.value = `${result.statusMessage}`;
     isAlertVisible.value = true;
     return;
   }
