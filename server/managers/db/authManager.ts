@@ -60,7 +60,6 @@ class DbAuthManager extends DbManager {
     await collection.updateOne(query, update);
     return;
   }
-
 }
 
 export default DbAuthManager;

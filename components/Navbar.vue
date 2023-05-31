@@ -24,6 +24,7 @@
           </a>
         </li>
         <li><a>Settings</a></li>
+        <li><NuxtLink to="/password_change">Change Password</NuxtLink></li>
         <button v-if="isLogged()" class="btn btn-primary mx-4" @click="logOut">LogOut</button>
       </ul>
     </div>

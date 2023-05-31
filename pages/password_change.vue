@@ -6,7 +6,7 @@
           <div class="hero-content flex-col lg:flex-row-reverse">
             <div class="text-center lg:text-left">
               <h1 class="text-5xl font-bold">Change your password!</h1>
-              <p class="py-6">Want to change your password? Enter the new one!</p>
+              <p class="py-6">Want to change your password? Just enter your new credentials.</p>
             </div>
             <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
               <div class="card-body">
@@ -24,14 +24,20 @@
                   </label>
                   <input type="password" placeholder="Password" class="input input-bordered" v-model="password_2" />
                   <label class="label">
-                    <router-link to="/login" class="label-text-alt link link-hover">Return to login page.</router-link>
+                    <router-link to="/" class="label-text-alt link link-hover">Return to home page.</router-link>
                   </label>
                 </div>
 
-                <div class="form-control mt-6">
-                  <button class="btn btn-primary" @click="passwordChangeHandler()">Change Password</button>
+                <div class="form-control mt-6 cursor-pointer" v-if="isAlertVisible" @click="dismissAlert()">
+                  <div class="alert alert-error shadow-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{{ error }}</span>
+                  </div>
                 </div>
 
+                <div class="form-control mt-6">
+                  <button class="btn btn-primary" :disabled="!isFormValid()" @click="passwordResetHandler()">Reset Password</button>
+                </div>
               </div>
             </div>
           </div>
@@ -49,7 +55,6 @@ definePageMeta({
   middleware: [
     function () {
       const { status } = useAuth();
-
       if (status.value !== "authenticated") {
         return navigateTo('/login')
       }
@@ -59,33 +64,38 @@ definePageMeta({
 
 const password_1 = useState<string>('password_1');
 const password_2 = useState<string>('password_2');
+const error = ref('');
+const isAlertVisible = ref(false);
 
-const passwordChangeHandler = async () => {
-  if (password_1.value !== password_2.value) {
-    alert("Passwords do not match");
-  }
+const dismissAlert = () : void => {
+  isAlertVisible.value = false;
+}
 
+const isFormValid = () : boolean => {
+  const out = typeof password_1.value == "string" && password_1.value.length > 0 &&
+              typeof password_2.value == "string" && password_2.value.length > 0 &&
+              password_1.value === password_2.value;
+
+  return out || false;
+}
+
+const passwordResetHandler = async () => {
   const credentials = {
-    // TODO: prendere la mail da auth
     email: data.value?.user?.email || '',
     password: password_1.value,
   };
 
-  try {
-    const result = await useFetch('/api/auth/password-reset', {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    }) as HttpResponse;
+  const result = (await useFetch('/api/auth/password-reset', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })).data.value as HttpResponse;
 
-    if (result.error) {
-      alert(`Error: ${result.error}`);
-    } else {
-      alert("Password reset successful");
-      return navigateTo('/login');
-    }
-
-  } catch (error) {
-    alert(`Error: ${error}`);
+  if (result.statusCode != 200) {
+    error.value = `Error: ${result.statusMessage}`;
+    isAlertVisible.value = true;
+    return;
   }
+
+  return navigateTo('/');
 }
 </script>
