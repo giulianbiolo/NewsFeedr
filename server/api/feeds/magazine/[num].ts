@@ -30,7 +30,12 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
     const feeds: Feed[] = await feedManager.getFeedForMagazine(magazine.progr || 0);
     return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
-    return err as HttpResponse;
+    const httpError = err as HttpResponse;
+    return {
+      statusCode: httpError.statusCode,
+      error: httpError.statusMessage,
+      statusMessage: httpError.statusMessage
+    };
   }
 
 })

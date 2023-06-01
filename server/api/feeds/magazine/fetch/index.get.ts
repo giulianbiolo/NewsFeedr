@@ -36,7 +36,14 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
       dbFeedManager.putFeeds(feeds);
 
       allFeeds = allFeeds.concat(feeds);
-    } catch (err) { }
+    } catch (err) {
+      const httpError = err as HttpResponse;
+      return {
+        statusCode: httpError.statusCode,
+        error: httpError.statusMessage,
+        statusMessage: httpError.statusMessage
+      };
+    }
   }
 
   return { statusCode: 200, data: allFeeds } as HttpResponse;
