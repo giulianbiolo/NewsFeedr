@@ -71,6 +71,29 @@ class DbFeedManager extends DbManager {
       throw createError({ statusCode: 500, statusMessage: `Cannot put the feeds, error: ${err}` });
     }
   }
+
+  async searchFeeds(keyword: string): Promise<Feed[]> {
+    if (keyword == null || keyword == '') {
+      return this.getFeeds();
+    }
+
+    const database = this.client.db(dbName);
+    const collection = database.collection(collectionName);
+
+    const query = {
+      $or: [
+        { progr_magazine: { $regex: keyword, $options: 'i' } },
+        { title: { $regex: keyword, $options: 'i' } },
+        { description: { $regex: keyword, $options: 'i' } },
+        { link: { $regex: keyword, $options: 'i' } },
+        { pubDate: { $regex: keyword, $options: 'i' } },
+      ],
+    };
+
+    const feeds = collection.find(query);
+    return feeds.toArray() as Promise<Feed[]>;
+  }
+
 }
 
 export default DbFeedManager;
