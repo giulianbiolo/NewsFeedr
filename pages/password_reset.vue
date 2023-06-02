@@ -46,6 +46,8 @@
         </div>
       </div>
     </template>
+    <template #sidebar>
+    </template>
   </BaseLayout>
 </template>
 
