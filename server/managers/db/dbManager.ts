@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-const uri = "mongodb+srv://admin:admin@cluster0.r4bplmk.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI || '';
 
 class DbManager {
   protected static instance: DbManager;

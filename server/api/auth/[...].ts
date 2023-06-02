@@ -5,8 +5,7 @@ import User from '~/models/user';
 import bcrypt from "bcryptjs";
 
 export default NuxtAuthHandler({
-  // TODO: mettere nel file .env
-  secret: "codice super segreto",
+  secret: process.env.SECRET_FOR_HASH_PASSWORD,
 
   pages: {
     signIn: '/login'

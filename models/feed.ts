@@ -8,5 +8,5 @@ export default interface Feed {
   description?: string,
   link?: string,
   pubDate?: Date,
-  magazine: Magazine[],
+  magazine?: Magazine[],
 }

@@ -1,6 +1,5 @@
 import Feed from "~/models/feed";
 import DbManager from "./dbManager";
-import { lookup } from "dns";
 
 const dbName = "NewsFeedr";
 const collectionName = "rssFeeds";

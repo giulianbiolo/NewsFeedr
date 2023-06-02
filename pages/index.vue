@@ -40,7 +40,6 @@
 
 <script setup lang="ts">
 import HttpResponse from '~/models/http_response';
-import Magazine from '~/models/magazine';
 import CustomModal from '~/components/CustomModal.vue';
 import { BookmarkIcon } from '@heroicons/vue/24/outline';
 import Feed from '~/models/feed';
@@ -63,7 +62,6 @@ definePageMeta({
 });
 
 var { data: feed_data } = await useFetch("/api/feeds") as HttpResponse;
-var { data: magazines } = await useFetch("/api/feeds/magazine") as HttpResponse;
 
 if (feed_data !== undefined && feed_data.data !== undefined) {
   feed_data.data = feed_data.data.sort((a: any, b: any) => {
