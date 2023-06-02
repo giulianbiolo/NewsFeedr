@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import Magazine from "./magazine";
 
 export default interface Feed {
   id?: ObjectId,
@@ -7,4 +8,5 @@ export default interface Feed {
   description?: string,
   link?: string,
   pubDate?: Date,
+  magazine: Magazine[],
 }

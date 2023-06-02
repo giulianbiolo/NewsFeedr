@@ -16,7 +16,7 @@
 
                 </td>
                 <td class="p-0">
-                  <div class="text-xs opacity-50">{{ getFeedsMagazine(feed.progr_magazine) }}</div>
+                  <div class="text-xs opacity-50">{{ feed.magazine[0]?.name }}</div>
                 </td>
                 <td class="w-80">
                   <div class="font-bold">{{ feed.title.length > 150 ? feed.title.slice(0, 150) + "..." : feed.title }}
@@ -94,18 +94,6 @@ function toggleBookmark(link: string): void {
 
 function isBookmarked(link: string): boolean {
   return bookmarks.value.includes(link);
-}
-
-function getFeedsMagazine(feed_progr: number): string {
-  if (magazines !== undefined && magazines._rawValue !== undefined && magazines._rawValue.data !== undefined) {
-    for (let i = 0; i < magazines._rawValue.data.length; i++) {
-      let magazine: Magazine = magazines._rawValue.data[i];
-      if (magazine.progr as number === feed_progr as number) {
-        return magazine.name as string;
-      }
-    };
-  }
-  return "Unknown journal";
 }
 
 function calcTimeDiff(date: string): string {
