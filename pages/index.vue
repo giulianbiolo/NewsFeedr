@@ -1,44 +1,58 @@
 <template>
-  <div class="px-4 pt-4">
-    <div class="card bg-base-100 block shadow-lg h-full">
-      <div class="card-body relative h-full overflow-hidden p-0">
-        <div class="overflow-x-auto shadow-xl">
-          <table class="table w-full">
-            <tbody>
-              <tr v-if="feed_data.data" v-for="feed in feed_data.data" class="hover" :href="feed.link"
-                @click="openModalWithData(feed)">
-                <td>
-                  <!-- Modify it to have onclick toggle a yellow color or neutral -->
-                  <div class="btn btn-ghost btn-square" @click="toggleBookmark(feed.link)">
-                    <BookmarkIcon class="h-6 w-6"
-                      :class="isBookmarked(feed.link) ? 'text-yellow-500' : 'text-gray-500'" />
-                  </div>
-
-                </td>
-                <td class="p-0">
-                  <div class="text-xs opacity-50">{{ getFeedsMagazine(feed.progr_magazine) }}</div>
-                </td>
-                <td class="w-80">
-                  <div class="font-bold">{{ feed.title.length > 150 ? feed.title.slice(0, 150) + "..." : feed.title }}
-                  </div>
-                  <div class="text-sm opacity-50">{{ feed.description.length > 200 ? feed.description.slice(0, 200) +
-                    "..." :
-                    feed.description }}</div>
-                </td>
-                <td class="text-right pl-0 py-0">
-                  <div>{{ calcTimeDiff(feed.pubDate) }}</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+  <BaseLayout>
+    <template #maincontent>
+      <div class="px-4 pt-4">
+        <div class="card bg-base-100 block shadow-lg h-full">
+          <div class="card-body relative h-full overflow-hidden p-0">
+            <div class="overflow-x-auto shadow-xl">
+              <table class="table w-full">
+                <tbody>
+                  <tr v-if="feed_data.data" v-for="feed in feed_data.data" class="hover" :href="feed.link"
+                    @click="openModalWithData(feed)">
+                    <td>
+                      <!-- Modify it to have onclick toggle a yellow color or neutral -->
+                      <div class="btn btn-ghost btn-square" @click="toggleBookmark(feed.link)">
+                        <BookmarkIcon class="h-6 w-6"
+                          :class="isBookmarked(feed.link) ? 'text-yellow-500' : 'text-gray-500'" />
+                      </div>
+                    </td>
+                    <td class="p-0">
+                      <div class="text-xs opacity-50">{{ getFeedsMagazine(feed.progr_magazine) }}</div>
+                    </td>
+                    <td class="w-80">
+                      <div class="font-bold">{{ feed.title.length > 150 ? feed.title.slice(0, 150) + "..." : feed.title }}
+                      </div>
+                      <div class="text-sm opacity-50">{{ feed.description.length > 200 ? feed.description.slice(0, 200) +
+                        "..." :
+                        feed.description }}</div>
+                    </td>
+                    <td class="text-right pl-0 py-0">
+                      <div>{{ calcTimeDiff(feed.pubDate) }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-  <CustomModal :title="modal_title" :description="modal_description" :modalId="feedModalId" />
+      <CustomModal :title="modal_title" :description="modal_description" :modalId="feedModalId" />
+    </template>
+    <template #sidebar>
+      <div v-if="magazines_sidebar && magazines_sidebar.data && magazines_sidebar.data.length > 0">
+        <li class="menu-title">
+          <span>Magazines</span>
+        </li>
+        <div v-for="magazine in magazines_sidebar.data">
+          <li><a :href="`/api/feeds/magazine/${magazine.progr}`">{{ magazine.name }}</a></li>
+        </div>
+      </div>
+    </template>
+  </BaseLayout>
 </template>
 
 <script setup lang="ts">
+import BaseLayout from '~/layouts/BaseLayout.vue';
 import HttpResponse from '~/models/http_response';
 import Magazine from '~/models/magazine';
 import CustomModal from '~/components/CustomModal.vue';
@@ -62,6 +76,7 @@ definePageMeta({
   ],
 });
 
+const { data: magazines_sidebar } = await useFetch("/api/feeds/magazine") as HttpResponse;
 var { data: feed_data } = await useFetch("/api/feeds") as HttpResponse;
 var { data: magazines } = await useFetch("/api/feeds/magazine") as HttpResponse;
 
