@@ -16,7 +16,7 @@
 
                 </td>
                 <td class="p-0">
-                  <div class="text-xs opacity-50">{{ feed.magazine[0]?.name }}</div>
+                  <div class="text-xs opacity-50">{{ feed.magazine?.name }}</div>
                 </td>
                 <td class="w-80">
                   <div class="font-bold">{{ feed.title.length > 150 ? feed.title.slice(0, 150) + "..." : feed.title }}

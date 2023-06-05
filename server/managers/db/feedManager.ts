@@ -7,6 +7,12 @@ const collectionName = "rssFeeds";
 class DbFeedManager extends DbManager {
   protected static instance: DbFeedManager;
 
+  private sort = { $sort: { pubDate: -1 }, };
+  private set = {
+    $set: {
+      magazine: { $arrayElemAt: ["$magazine", 0] }
+    }
+  };
   private lookup = {
     $lookup: {
       from: 'magazines',
@@ -15,7 +21,6 @@ class DbFeedManager extends DbManager {
       as: 'magazine',
     }
   };
-  private sort = { $sort: { pubDate: -1 }, };
 
   private constructor() {
     super();
@@ -32,7 +37,8 @@ class DbFeedManager extends DbManager {
     try {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
-      const result = await collection.aggregate([this.lookup, this.sort]).toArray() as Feed[];
+      const pipeline = [this.lookup, this.set, this.sort];
+      const result = await collection.aggregate(pipeline).toArray() as Feed[];
 
       return result;
     } catch (err) {
@@ -44,7 +50,7 @@ class DbFeedManager extends DbManager {
     try {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
-      const pipeline = [ this.lookup, this.sort, { $limit: n }, ];
+      const pipeline = [this.lookup, this.set, this.sort, { $limit: n },];
       const result = await collection.aggregate(pipeline).toArray() as Feed[];
       return result;
     } catch (err) {
@@ -56,7 +62,8 @@ class DbFeedManager extends DbManager {
     try {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
-      const result = await collection.find({ progr_magazine: progr_magazine }).toArray() as Feed[];
+      const pipeline: object[] = [this.lookup, this.set, this.sort, { $match: { progr_magazine: progr_magazine } }];
+      const result = await collection.aggregate(pipeline).toArray() as Feed[];
       return result;
     } catch (err) {
       throw createError({ statusCode: 500, statusMessage: `Cannot get the feeds, error: ${err}` });
@@ -98,7 +105,8 @@ class DbFeedManager extends DbManager {
       ],
     };
 
-    const feeds = collection.aggregate([this.lookup, { $match: query }, this.sort]);
+    const pipeline = [this.lookup, { $match: query }, this.set, this.sort];
+    const feeds = collection.aggregate(pipeline);
     return feeds.toArray() as Promise<Feed[]>;
   }
 
