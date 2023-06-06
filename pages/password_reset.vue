@@ -7,8 +7,9 @@
             <div class="hero h-full">
               <div class="hero-content flex-col lg:flex-row-reverse">
                 <div class="text-center lg:text-left">
-                  <h1 class="text-5xl font-bold">Login now!</h1>
-                  <p class="py-6">Enter your email and password to access your personalized feed and saved posts.</p>
+                  <h1 class="text-5xl font-bold">Reset your password!</h1>
+                  <p class="py-6">If you've forgotten your password, don't worry! Just enter your email and new password.
+                  </p>
                 </div>
                 <div class="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
                   <div class="card-body">
@@ -22,15 +23,16 @@
                       <label class="label">
                         <span class="label-text">Password</span>
                       </label>
-                      <input type="password" placeholder="Password" class="input input-bordered" v-model="password" />
+                      <input type="password" placeholder="Password" class="input input-bordered" v-model="password_1" />
+                    </div>
+                    <div class="form-control">
                       <label class="label">
-                        <router-link to="/register" class="label-text-alt link link-hover">Don't have an account yet?
-                          Register
-                          now.</router-link>
+                        <span class="label-text">Repeat password</span>
                       </label>
+                      <input type="password" placeholder="Password" class="input input-bordered" v-model="password_2" />
                       <label class="label">
-                        <router-link to="/password_reset" class="label-text-alt link link-hover">Reset your
-                          password!</router-link>
+                        <router-link to="/login" class="label-text-alt link link-hover">Return to login
+                          page.</router-link>
                       </label>
                     </div>
                     <div class="form-control mt-6 cursor-pointer" v-if="isAlertVisible" @click="dismissAlert()">
@@ -44,8 +46,8 @@
                       </div>
                     </div>
                     <div class="form-control mt-6">
-                      <button class="btn btn-primary" :disabled="!isFormValid()"
-                        @click="mySignInHandler({ email, password })">Login</button>
+                      <button class="btn btn-primary" :disabled="!isFormValid()" @click="passwordResetHandler()">Reset
+                        Password</button>
                     </div>
                   </div>
                 </div>
@@ -61,7 +63,9 @@
 </template>
 
 <script setup lang="ts">
+import HttpResponse from '~/models/http_response';
 import BaseLayout from '~/layouts/BaseLayout.vue';
+
 definePageMeta({
   middleware: "auth",
   auth: {
@@ -70,9 +74,9 @@ definePageMeta({
   }
 });
 
-const { signIn } = useAuth();
 const email = useState<string>('email');
-const password = useState<string>('password');
+const password_1 = useState<string>('password_1');
+const password_2 = useState<string>('password_2');
 const error = ref('');
 const isAlertVisible = ref(false);
 
@@ -82,23 +86,30 @@ const dismissAlert = (): void => {
 
 const isFormValid = (): boolean => {
   const out = typeof email.value == "string" && email.value.length > 0 &&
-    typeof password.value == "string" && password.value.length > 0;
-  return out;
+    typeof password_1.value == "string" && password_1.value.length > 0 &&
+    typeof password_2.value == "string" && password_2.value.length > 0 &&
+    password_1.value === password_2.value;
+
+  return out || false;
 }
 
-const mySignInHandler = async ({ email, password }: { email: string, password: string }) => {
-  const result = await signIn('credentials', { email: email, password: password, redirect: false, callbackUrl: '/' });
+const passwordResetHandler = async () => {
+  const credentials = {
+    email: email.value,
+    password: password_1.value,
+  };
 
-  if (result?.error == "CredentialsSignin") {
-    error.value = `The credentials are incorrect. Try again!`;
+  const result = (await useFetch('/api/auth/password-reset', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })).data.value as HttpResponse;
+
+  if (result.statusCode != 200) {
+    error.value = `${result.statusMessage}`;
     isAlertVisible.value = true;
-  } else if (result?.error) {
-    error.value = `${result.error}`;
-    isAlertVisible.value = true;
-  } else {
-    return navigateTo('/');
+    return;
   }
 
-  return
+  return navigateTo('/login');
 }
 </script>

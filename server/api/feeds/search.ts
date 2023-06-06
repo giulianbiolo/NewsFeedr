@@ -10,16 +10,18 @@ export default defineEventHandler(async (event): Promise<HttpResponse>  => {
   }
 
   const db = DbFeedManager.getInstance();
+  const query = getQuery(event);
+  const keyword = query.keyword;
 
   try {
-    const feeds: Feed[] = await db.getFeeds();
+    const feeds: Feed[] = await db.searchFeeds(keyword as string);
     return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
     const httpError = err as HttpResponse;
     return {
       statusCode: httpError.statusCode,
       error: httpError.statusMessage,
-      statusMessage: httpError.statusMessage
+      statusMessage: httpError.statusMessage,
     };
   }
 })

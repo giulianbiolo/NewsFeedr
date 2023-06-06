@@ -1,9 +1,15 @@
-import Feed from "~/models/feed";
 import DbFeedManager from "~/server/managers/db/feedManager";
 import DbMagazineManager from "~/server/managers/db/magazineManager";
 import HttpFeedManager from "~/server/managers/http/feedManager";
+import { getServerSession } from "#auth";
+import HttpResponse from "~/models/http_response";
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<HttpResponse> => {
+  const session = await getServerSession(event);
+  if (!session) {
+    return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
+  }
+
   let num = event.context.params?.num;
   const magazineManager = DbMagazineManager.getInstance();
 
@@ -23,8 +29,13 @@ export default defineEventHandler(async (event) => {
     }
     dbFeedManager.putFeeds(feeds);
 
-    return { statusCode: 200, body: feeds };
+    return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
-    return err;
+    const httpError = err as HttpResponse;
+    return {
+      statusCode: httpError.statusCode,
+      error: httpError.statusMessage,
+      statusMessage: httpError.statusMessage
+    };
   }
 })
