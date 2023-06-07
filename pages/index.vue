@@ -11,9 +11,9 @@
                     @click="openModalWithData(feed)">
                     <td>
                       <!-- Modify it to have onclick toggle a yellow color or neutral -->
-                      <div class="btn btn-ghost btn-square" @click="toggleBookmark(feed.link); openModalWithData(feed);">
+                      <div class="btn btn-ghost btn-square" @click="toggleBookmark(feed); openModalWithData(feed);">
                         <BookmarkIcon class="h-6 w-6"
-                          :class="isBookmarked(feed.link) ? 'text-yellow-500' : 'text-gray-500'" />
+                          :class="feed.isBookmarked ? 'text-yellow-500' : 'text-gray-500'" />
                       </div>
                     </td>
                     <td class="p-0">
@@ -22,7 +22,7 @@
                     <td class="w-80">
                       <div class="font-bold">{{ feed.title.length > 150 ? feed.title.slice(0, 150) + "..." : feed.title }}
                       </div>
-                      <div class="text-sm opacity-50">{{ feed.description.length > 200 ? feed.description.slice(0, 200) +
+                      <div class="text-sm opacity-50">{{ feed.description.length > 150 ? feed.description.slice(0, 150) +
                         "..." :
                         feed.description }}</div>
                     </td>
@@ -36,15 +36,16 @@
           </div>
         </div>
       </div>
-      <CustomModal :title="modal_title" :description="modal_description" :modalId="feedModalId" />
+      <CustomModal :title="modal_title" :description="modal_description" :link="modal_link" :modalId="feedModalId" />
     </template>
     <template #sidebar>
       <div v-if="magazines_sidebar && magazines_sidebar.data && magazines_sidebar.data.length > 0">
         <li class="menu-title">
           <span>Magazines</span>
         </li>
+        <li><a @click="showFeedsOfMagazine(undefined)">All magazines</a></li>
         <div v-for="magazine in magazines_sidebar.data">
-          <li><a :href="`/api/feeds/magazine/${magazine.progr}`">{{ magazine.name }}</a></li>
+          <li><a @click="showFeedsOfMagazine(magazine.progr)">{{ magazine.name }}</a></li>
         </div>
       </div>
     </template>
@@ -54,16 +55,16 @@
 <script setup lang="ts">
 import BaseLayout from '~/layouts/BaseLayout.vue';
 import HttpResponse from '~/models/http_response';
-import Magazine from '~/models/magazine';
 import CustomModal from '~/components/CustomModal.vue';
 import { BookmarkIcon } from '@heroicons/vue/24/outline';
 import Feed from '~/models/feed';
 
+const {data: userData} = useAuth();
 const feedModalId = "feeds-popup-modal";
 
-var bookmarks = useState<string[]>('bookmarks', () => []);
 var modal_title = useState<string>('modal_title', () => '');
 var modal_description = useState<string>('modal_description', () => '');
+var modal_link = useState<string>('modal_link', () => '');
 
 definePageMeta({
   middleware: [
@@ -77,38 +78,62 @@ definePageMeta({
 });
 
 const { data: magazines_sidebar } = await useFetch("/api/feeds/magazine") as HttpResponse;
-var { data: feed_data } = await useFetch("/api/feeds") as HttpResponse;
-var { data: magazines } = await useFetch("/api/feeds/magazine") as HttpResponse;
+const feed_data = useState<HttpResponse>('feeds',   () => { return {} });
+feed_data.value = (await useFetch("/api/feeds") as HttpResponse).data;
 
-if (feed_data !== undefined && feed_data.data !== undefined) {
-  feed_data.data = feed_data.data.sort((a: any, b: any) => {
-    return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
-  });
-  console.log("Feed:");
-  console.log(feed_data);
+
+if (feed_data.value !== undefined && feed_data.value.data !== undefined) {
+ feed_data.value.data = (feed_data.value.data as Feed[]).sort((a: any, b: any) => {
+   return new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime();
+ });
+}
+
+async function showFeedsOfMagazine(progr_magazine: number | undefined) {
+  var url = "/api/feeds";
+  if (progr_magazine !== undefined) {
+    url = url.concat(`/magazine/${progr_magazine}`);
+  }
+
+  feed_data.value = (await useFetch(url) as HttpResponse).data;
 }
 
 function openModalWithData(feed: Feed): void {
-  console.log("Opening modal with data:");
-  console.log(feed);
   const modal_toggle = document.getElementById(feedModalId);
   if (modal_toggle !== null) {
     modal_toggle.click();
   }
   modal_title.value = feed.title ? feed.title : "No title";
   modal_description.value = feed.description ? feed.description : "No description";
+  modal_link.value = feed.link ? feed.link : "No link";
+
 }
 
-function toggleBookmark(link: string): void {
-  if (bookmarks.value.includes(link)) {
-    bookmarks.value.splice(bookmarks.value.indexOf(link), 1);
+async function toggleBookmark(feed: Feed): Promise<void> {
+  const userId = userData.value?.uid || '';
+
+  if (feed.isBookmarked) {
+    const result = (await useFetch('/api/feeds/bookmark', {
+      method: 'delete',
+      body: JSON.stringify({ userId: userId, feedId: feed._id }),
+    })).data.value as HttpResponse;
+
+    if (result.statusCode !== 200) {
+      console.error("error: " + result.statusMessage);
+    }
+
+    feed.isBookmarked = false;
   } else {
-    bookmarks.value.push(link);
-  }
-}
+    const result = (await useFetch('/api/feeds/bookmark', {
+      method: 'put',
+      body: JSON.stringify({userId: userId, feedId: feed._id}),
+    })).data.value as HttpResponse;
 
-function isBookmarked(link: string): boolean {
-  return bookmarks.value.includes(link);
+    if (result.statusCode !== 200) {
+      console.error("error: " + result.statusMessage);
+    }
+    
+    feed.isBookmarked = true;
+  }
 }
 
 function calcTimeDiff(date: string): string {

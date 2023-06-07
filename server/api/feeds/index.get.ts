@@ -12,7 +12,7 @@ export default defineEventHandler(async (event): Promise<HttpResponse>  => {
   const db = DbFeedManager.getInstance();
 
   try {
-    const feeds: Feed[] = await db.getFeeds();
+    const feeds: Feed[] = await db.getFeeds(session.uid);
     return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
     const httpError = err as HttpResponse;
