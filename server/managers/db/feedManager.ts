@@ -100,8 +100,6 @@ class DbFeedManager extends DbManager {
       const collection = database.collection(collectionName);
       const bookmarksLookup = this.getLookupFunctionForBookmarks(userId);
 
-      console.log("sono qui che bello");
-
       const pipeline = [
         this.lookupMagazines,
         this.setMagazineField,
@@ -111,8 +109,6 @@ class DbFeedManager extends DbManager {
         { $match: { progr_magazine: progr_magazine } }
       ];
       const result = await collection.aggregate(pipeline).toArray() as Feed[];
-
-      console.log(result);
 
       return result;
     } catch (err) {
