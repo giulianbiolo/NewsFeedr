@@ -94,12 +94,26 @@ class DbFeedManager extends DbManager {
     }
   }
 
-  async getFeedForMagazine(progr_magazine: number): Promise<Feed[]> {
+  async getFeedForMagazine(progr_magazine: number, userId: string): Promise<Feed[]> {
     try {
       const database = this.client.db(dbName);
       const collection = database.collection(collectionName);
-      const pipeline: object[] = [this.lookupMagazines, this.setMagazineField, this.sort, { $match: { progr_magazine: progr_magazine } }];
+      const bookmarksLookup = this.getLookupFunctionForBookmarks(userId);
+
+      console.log("sono qui che bello");
+
+      const pipeline = [
+        this.lookupMagazines,
+        this.setMagazineField,
+        bookmarksLookup,
+        this.setIsBookmarkedField,
+        this.sort,
+        { $match: { progr_magazine: progr_magazine } }
+      ];
       const result = await collection.aggregate(pipeline).toArray() as Feed[];
+
+      console.log(result);
+
       return result;
     } catch (err) {
       throw createError({ statusCode: 500, statusMessage: `Cannot get the feeds, error: ${err}` });

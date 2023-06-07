@@ -27,7 +27,7 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
   }
 
   try {
-    const feeds: Feed[] = await feedManager.getFeedForMagazine(magazine.progr || 0);
+    const feeds: Feed[] = await feedManager.getFeedForMagazine(magazine.progr || 0, session.uid);
     return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
     const httpError = err as HttpResponse;
