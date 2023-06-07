@@ -11,6 +11,20 @@ export default NuxtAuthHandler({
     signIn: '/login'
   },
 
+  callbacks: {
+    jwt: async ({ token, user }) => {
+      const isSignIn = user ? true : false;
+      if (isSignIn) {
+        token.id = user ? user.id || '' : '';
+      }
+      return Promise.resolve(token);
+    },
+    session: async ({ session, token }) => {
+      (session as any).uid = token.id;
+      return Promise.resolve(session);
+    },
+  },
+
   providers: [
     // @ts-expect-error You need to use .default here for it to work during SSR. May be fixed via Vite at some point
     CredentialsProvider.default({
@@ -21,11 +35,16 @@ export default NuxtAuthHandler({
       },
       async authorize(credentials: { email: string, password: string }) {
         const authManager = DbAuthManager.getInstance();
-        const user = await authManager.findOne(credentials as User);
+        const user: User | null = await authManager.findOne(credentials as User);
 
         if (user != null) {
           if (await bcrypt.compare(credentials.password, user.password || "")) {
-            return user;
+            const u = {
+              id: user._id,
+              name: user.name,
+              email: user.email,
+            }
+            return u;
           }
         }
 
@@ -34,4 +53,5 @@ export default NuxtAuthHandler({
       }
     })
   ],
+
 })
