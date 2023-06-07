@@ -109,7 +109,7 @@ function openModalWithData(feed: Feed): void {
 }
 
 async function toggleBookmark(feed: Feed): Promise<void> {
-  const userId = userData.value?.uid || '';
+  const userId = (userData.value as any).uid || '';
 
   if (feed.isBookmarked) {
     const result = (await useFetch('/api/feeds/bookmark', {

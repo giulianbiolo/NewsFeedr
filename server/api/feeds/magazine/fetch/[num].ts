@@ -10,6 +10,10 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
     return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
   }
 
+  if (!(session as any).isAdministrator) {
+    return { status: 'unauthorized!', statusCode: 401, } as HttpResponse;
+  }
+
   let num = event.context.params?.num;
   const magazineManager = DbMagazineManager.getInstance();
 

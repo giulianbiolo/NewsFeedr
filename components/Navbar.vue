@@ -24,6 +24,11 @@
           </router-link>
         </li>
         <li><a>Settings</a></li>
+        <li v-if="isAdministrator()">
+          <router-link to="/admin/update_feeds" class="justify-between">
+            Update Feeds
+          </router-link>
+        </li>
         <li><NuxtLink to="/password_change">Change Password</NuxtLink></li>
         <button v-if="isLogged()" class="btn btn-primary mx-4" @click="logOut">LogOut</button>
       </ul>
@@ -35,9 +40,15 @@
 <script setup lang="ts">
 import { Bars3Icon } from "@heroicons/vue/24/solid";
 const { status, signOut, data } = useAuth();
+
 const isLogged = (): boolean => {
   return status.value == "authenticated";
 }
+
+const isAdministrator = (): boolean => {
+  return data.value.isAdministrator;
+}
+
 const logOut = async () => {
   await signOut();
 };

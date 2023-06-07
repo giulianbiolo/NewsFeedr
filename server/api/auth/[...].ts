@@ -16,11 +16,13 @@ export default NuxtAuthHandler({
       const isSignIn = user ? true : false;
       if (isSignIn) {
         token.id = user ? user.id || '' : '';
+        token.isAdministrator = user ? (user as User).isAdministrator || false : false;
       }
       return Promise.resolve(token);
     },
     session: async ({ session, token }) => {
       (session as any).uid = token.id;
+      (session as any).isAdministrator = token.isAdministrator;
       return Promise.resolve(session);
     },
   },
@@ -43,6 +45,7 @@ export default NuxtAuthHandler({
               id: user._id,
               name: user.name,
               email: user.email,
+              isAdministrator: user.isAdministrator,
             }
             return u;
           }

@@ -5,6 +5,7 @@ import HttpResponse from "~/models/http_response";
 
 export default defineEventHandler(async (event): Promise<HttpResponse>  => {
   const session = await getServerSession(event);
+
   if (!session) {
     return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
   }
@@ -12,7 +13,7 @@ export default defineEventHandler(async (event): Promise<HttpResponse>  => {
   const db = DbFeedManager.getInstance();
 
   try {
-    const feeds: Feed[] = await db.getFeeds(session.uid);
+    const feeds: Feed[] = await db.getFeeds((session as any).uid);
     return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
     const httpError = err as HttpResponse;
