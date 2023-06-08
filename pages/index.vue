@@ -1,5 +1,5 @@
 <template>
-  <BaseLayout>
+  <BaseLayout @search-keyword="searchKeyword">
     <template #maincontent>
       <div class="px-4 pt-4">
         <div class="card bg-base-100 block shadow-lg h-full">
@@ -156,5 +156,16 @@ function calcTimeDiff(date: string): string {
             ? minutes.toString() + "m"
             : seconds.toString() + "s"
   );
+}
+
+async function searchKeyword(keyword: string): Promise<void> {
+  const url = `/api/feeds/search?keyword=${keyword}`;
+  const result = (await useFetch(url)).data.value as HttpResponse;
+
+  if (result.statusCode !== 200) {
+    console.error("error: " + result.statusMessage);
+  }
+
+  feed_data.value = result;
 }
 </script>

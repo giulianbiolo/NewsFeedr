@@ -3,7 +3,7 @@
     <input id="custom_sidebar" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
       <!-- Page content here -->
-      <Navbar />
+      <Navbar @search-keyword="searchKeyword"/>
       <slot name="maincontent" />
     </div>
     <div class="drawer-side bg-base-100">
@@ -29,4 +29,10 @@ useHead({
     'data-theme': 'dark',
   },
 });
+
+const emit = defineEmits(['searchKeyword']);
+
+const searchKeyword = (keyword: string) => {
+  emit('searchKeyword', keyword);
+}
 </script>

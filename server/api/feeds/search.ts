@@ -14,7 +14,7 @@ export default defineEventHandler(async (event): Promise<HttpResponse>  => {
   const keyword = query.keyword;
 
   try {
-    const feeds: Feed[] = await db.searchFeeds(keyword as string, session._uid);
+    const feeds: Feed[] = await db.searchFeeds(keyword as string, (session as any).uid);
     return { statusCode: 200, data: feeds } as HttpResponse;
   } catch (err) {
     const httpError = err as HttpResponse;

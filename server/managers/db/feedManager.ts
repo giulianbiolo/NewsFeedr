@@ -151,7 +151,16 @@ class DbFeedManager extends DbManager {
       ],
     };
 
-    const pipeline = [this.lookupMagazines, { $match: query }, this.setMagazineField, this.sort];
+    const bookmarksLookup = this.getLookupFunctionForBookmarks(userId);
+
+    const pipeline = [
+      this.lookupMagazines,
+      { $match: query },
+      this.setMagazineField,
+      bookmarksLookup,
+      this.setIsBookmarkedField,
+      this.sort
+    ];
     const feeds = collection.aggregate(pipeline);
     return feeds.toArray() as Promise<Feed[]>;
   }
