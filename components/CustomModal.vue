@@ -13,6 +13,7 @@
           <div class="flex flex-row justify-between">
             <p class="text-base-content opacity-90">{{ description }}</p>
           </div>
+          <slot />
         </a>
       </div>
     </label>

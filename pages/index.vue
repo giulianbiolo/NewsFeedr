@@ -1,7 +1,7 @@
 <template>
   <BaseLayout @search-keyword="searchKeyword">
     <template #maincontent>
-      <div class="px-4 pt-4">
+      <div class="px-4 pt-4 h-[90vh]">
         <div class="card bg-base-100 block shadow-lg h-full">
           <div class="card-body relative h-full overflow-hidden p-0">
             <div class="overflow-x-auto shadow-xl">
@@ -19,7 +19,7 @@
                     <td class="p-0">
                       <div class="text-xs opacity-50">{{ feed.magazine.name }}</div>
                     </td>
-                    <td class="w-80">
+                    <td>
                       <div class="font-bold">{{ feed.title.length > 150 ? feed.title.slice(0, 150) + "..." : feed.title }}
                       </div>
                       <div class="text-sm opacity-50">{{ feed.description.length > 150 ? feed.description.slice(0, 150) +

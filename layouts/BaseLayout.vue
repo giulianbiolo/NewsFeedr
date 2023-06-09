@@ -1,5 +1,5 @@
 <template>
-  <div class="drawer drawer-mobile bg-base-200 shadow">
+  <div class="drawer drawer-mobile bg-base-200 shadow lg:drawer-open">
     <input id="custom_sidebar" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
       <!-- Page content here -->
