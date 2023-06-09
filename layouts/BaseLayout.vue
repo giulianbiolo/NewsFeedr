@@ -3,8 +3,8 @@
     <input id="custom_sidebar" type="checkbox" class="drawer-toggle" />
     <div class="drawer-content">
       <!-- Page content here -->
-      <Navbar />
-      <slot />
+      <Navbar @search-keyword="searchKeyword"/>
+      <slot name="maincontent" />
     </div>
     <div class="drawer-side bg-base-100">
       <label for="custom_sidebar" class="drawer-overlay h-[90vh]"></label>
@@ -13,22 +13,15 @@
         <div class="hidden md:inline mb-10">
           <LogoSvg className="w-48 h-12" isDark />
         </div>
-        <div v-if="data && data.data && data.data.length > 0">
-          <li class="menu-title">
-            <span>Magazines</span>
-          </li>
-          <div v-for="magazine in data.data">
-            <li><a :href="`/api/feeds/magazine/${magazine.progr}`">{{ magazine.name }}</a></li>
-          </div>
-        </div>
+        <slot name="sidebar" />
       </ul>
     </div>
   </div>
 </template>
 
+
+
 <script setup lang="ts">
-import { useHead } from 'unhead';
-import HttpResponse from '~/models/http_response';
 import LogoSvg from '~/components/LogoSvg.vue';
 useHead({
   htmlAttrs: {
@@ -36,5 +29,10 @@ useHead({
     'data-theme': 'dark',
   },
 });
-const { data } = await useFetch("/api/feeds/magazine") as HttpResponse; 
+
+const emit = defineEmits(['searchKeyword']);
+
+const searchKeyword = (keyword: string) => {
+  emit('searchKeyword', keyword);
+}
 </script>
