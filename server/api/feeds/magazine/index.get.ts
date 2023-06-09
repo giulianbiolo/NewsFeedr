@@ -15,11 +15,6 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
     const magazines: Magazine[] = await db.getMagazines();
     return { statusCode: 200, data: magazines } as HttpResponse;
   } catch (err) {
-    const httpError = err as HttpResponse;
-    return {
-      statusCode: httpError.statusCode,
-      error: httpError.statusMessage,
-      statusMessage: httpError.statusMessage
-    };
+    return { err } as HttpResponse;
   }
 })

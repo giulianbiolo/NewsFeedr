@@ -5,26 +5,11 @@ import User from '~/models/user';
 import bcrypt from "bcryptjs";
 
 export default NuxtAuthHandler({
-  secret: process.env.SECRET_FOR_HASH_PASSWORD,
+  // TODO: mettere nel file .env
+  secret: "codice super segreto",
 
   pages: {
     signIn: '/login'
-  },
-
-  callbacks: {
-    jwt: async ({ token, user }) => {
-      const isSignIn = user ? true : false;
-      if (isSignIn) {
-        token.id = user ? user.id || '' : '';
-        token.isAdministrator = user ? (user as User).isAdministrator || false : false;
-      }
-      return Promise.resolve(token);
-    },
-    session: async ({ session, token }) => {
-      (session as any).uid = token.id;
-      (session as any).isAdministrator = token.isAdministrator;
-      return Promise.resolve(session);
-    },
   },
 
   providers: [
@@ -37,17 +22,11 @@ export default NuxtAuthHandler({
       },
       async authorize(credentials: { email: string, password: string }) {
         const authManager = DbAuthManager.getInstance();
-        const user: User | null = await authManager.findOne(credentials as User);
+        const user = await authManager.findOne(credentials as User);
 
         if (user != null) {
           if (await bcrypt.compare(credentials.password, user.password || "")) {
-            const u = {
-              id: user._id,
-              name: user.name,
-              email: user.email,
-              isAdministrator: user.isAdministrator,
-            }
-            return u;
+            return user;
           }
         }
 
@@ -56,5 +35,4 @@ export default NuxtAuthHandler({
       }
     })
   ],
-
 })
