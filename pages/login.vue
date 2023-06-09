@@ -99,6 +99,6 @@ const mySignInHandler = async ({ email, password }: { email: string, password: s
     return navigateTo('/');
   }
 
-  return
+  return;
 }
 </script>
