@@ -1,8 +1,14 @@
 import DbAuthManager from "~/server/managers/db/authManager";
 import bcrypt from 'bcryptjs';
 import HttpResponse from "~/models/http_response";
+import {getServerSession} from "#auth";
 
 export default defineEventHandler(async (event): Promise<HttpResponse> => {
+  const session = await getServerSession(event);
+  if (!session) {
+    return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
+  }
+
   const body = await readBody(event);
   const db = DbAuthManager.getInstance();
 
