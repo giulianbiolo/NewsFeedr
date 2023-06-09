@@ -13,6 +13,7 @@
           <div class="flex flex-row justify-between">
             <p class="text-base-content opacity-90">{{ description }}</p>
           </div>
+          <slot />
         </a>
       </div>
     </label>
@@ -20,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { withDefaults } from 'vue';
 const props = withDefaults(defineProps<{
   title: string;
   description: string;
