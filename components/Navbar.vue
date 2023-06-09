@@ -7,9 +7,11 @@
     </div>
     <div v-if="isLogged()" class="flex-1 mr-4">
       <div class="form-control w-full">
-        <input type="text" placeholder="Search" class="input input-bordered w-full" v-model="keyword" />
+        <input type="text" placeholder="Search" class="input input-bordered w-full" v-on:input="searchKeyword()" v-model="keyword" />
       </div>
-      <button class="btn btn-primary" @click="searchKeyword()">Search</button>
+      <button class="btn btn-square btn-ghost ml-2">
+        <MagnifyingGlassIcon class="w-6 h-6" />
+      </button>
     </div>
     <div v-if="isLogged()" class="flex-none dropdown dropdown-end">
       <label tabindex="0" class="btn btn-ghost btn-circle avatar">
@@ -42,6 +44,7 @@
 
 <script setup lang="ts">
 import { Bars3Icon } from "@heroicons/vue/24/solid";
+import { MagnifyingGlassIcon } from "@heroicons/vue/24/outline";
 const { status, signOut, data } = useAuth();
 const emit = defineEmits(['searchKeyword']);
 
