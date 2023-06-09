@@ -111,13 +111,12 @@ const isFormValid = (): boolean => {
 }
 
 const register = async () => {
-  const { signIn } = useAuth();
-
   const credentials = {
     name: name.value,
     surname: surname.value,
     email: email.value,
     password: password_1.value,
+    isAdministrator: false,
   };
 
   const result = (await useFetch('/api/auth/register', {
@@ -131,17 +130,6 @@ const register = async () => {
     return;
   }
 
-  const loginResult = await signIn('credentials', { email: email, password: password_1, redirect: false });
-  if (loginResult?.error == "CredentialsSignin") {
-    error.value = `The credentials are incorrect. Try again!`;
-    isAlertVisible.value = true;
-  } else if (loginResult?.error) {
-    error.value = `${loginResult.error}`;
-    isAlertVisible.value = true;
-  } else {
-    return navigateTo('/');
-  }
-
-  return;
+  return navigateTo('/login');
 }
 </script>

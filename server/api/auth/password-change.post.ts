@@ -26,6 +26,10 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
     return { statusCode: 200 };
   } catch (err) {
     const httpError = err as HttpResponse;
-    return { statusCode: httpError.statusCode, statusMessage: httpError.statusMessage };
+    return {
+      statusCode: httpError.statusCode,
+      error: httpError.statusMessage,
+      statusMessage: httpError.statusMessage
+    };
   }
 })

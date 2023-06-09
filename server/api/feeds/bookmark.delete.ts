@@ -1,19 +1,13 @@
-import DbFeedManager from "~/server/managers/db/feedManager";
-import { getServerSession } from "#auth";
 import HttpResponse from "~/models/http_response";
+import DbBookmarksManager from "~/server/managers/db/bookmarkManager";
 
 export default defineEventHandler(async (event): Promise<HttpResponse> => {
-  const session = await getServerSession(event);
-  if (!session) {
-    return { status: 'unauthenticated!', statusCode: 403, } as HttpResponse;
-  }
-
   const body = await readBody(event);
-  const db = DbFeedManager.getInstance();
+  const db = DbBookmarksManager.getInstance();
 
   try {
-    await db.putFeeds(body);
-    return { statusCode: 200 } as HttpResponse;
+    const result = await db.removeBookmark(body);
+    return { statusCode: 200, data: JSON.stringify(result) };
   } catch (err) {
     const httpError = err as HttpResponse;
     return {
@@ -22,4 +16,5 @@ export default defineEventHandler(async (event): Promise<HttpResponse> => {
       statusMessage: httpError.statusMessage
     };
   }
+
 })
